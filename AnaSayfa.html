@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evital - Sağlık Asistanınız</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <style>
+      @media (max-width: 1024px) {
+      .module-card:hover {
+      transform: translateY(-3px);
+      }
+      }
+      .module-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      }
+      @media (min-width: 1024px) {
+      .module-card:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(5px);
+      }
+      }
+      .chat-container {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      min-height: 500px;
+      }
+      @media (max-width: 1024px) {
+      .chat-container {
+      min-height: 60vh;
+      }
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#9333ea",
+              secondary: "#6b21a8",
+            },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @media (max-width: 1024px) {
+      .module-card:hover {
+      transform: translateY(-3px);
+      }
+      }
+      .module-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      }
+      @media (min-width: 1024px) {
+      .module-card:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(5px);
+      }
+      }
+      .chat-container {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      min-height: 500px;
+      }
+      @media (max-width: 1024px) {
+      .chat-container {
+      min-height: 60vh;
+      }
+      }
+    </style>
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+      background: url('static/image.png') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      }
+      .chat-container {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .message-input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .module-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      }
+      .module-card:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-3px);
+      }
+      .category-btn {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.2s ease;
+      }
+      .category-btn:hover, .category-btn.active {
+      background-color: rgba(255, 255, 255, 0.2);
+      }
+      .chat-logo {
+      opacity: 0.1;
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      top: 25%;
+      left: 25%;
+      z-index: -1;
+      }
+    </style>
+  </head>
+  <body class="text-white">
+    <div class="container mx-auto px-4 py-8 min-h-screen">
+      <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Mobile Header -->
+        <div class="lg:hidden flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+            >
+              <i class="ri-health-book-line ri-lg"></i>
+            </div>
+            <h1 class="text-xl font-medium">Evital</h1>
+          </div>
+          <button
+            id="mobileMenuBtn"
+            class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+          >
+            <i class="ri-menu-line ri-lg"></i>
+          </button>
+        </div>
+        <!-- Left Sidebar with Modules -->
+        <div
+          id="sidebarMenu"
+          class="w-full lg:w-80 lg:flex-shrink-0 hidden lg:block"
+        >
+          <div class="lg:sticky lg:top-8">
+            <!-- Logo Area -->
+            <div class="flex items-center gap-3 mb-8">
+              <div
+                class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+              >
+                <i class="ri-health-book-line ri-lg"></i>
+              </div>
+              <a href="arayuzSecimEkrani.html"><h1 class="text-xl font-medium">Arayüz Seçim Ekranına Dön -></h1></a>
+            </div>
+            <!-- Module List -->
+            <div class="space-y-3 mb-6 lg:mb-0">
+              <a
+                href="Randevu-İşlemleri-Sayfası.html"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-check-line"></i>
+                  </div>
+                  <h3 class="font-medium">Randevu İşlemleri</h3>
+                </div>
+              </a>
+              <a
+                href="Randevu-Oluşturma-Sayfası.html"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-todo-line"></i>
+                  </div>
+                  <h3 class="font-medium">Randevu Oluşturma</h3>
+                </div>
+              </a>
+              <a
+                href="Evital-Süreçleri-Açıklamaları.html"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-todo-line"></i>
+                  </div>
+                  <h3 class="font-medium">Evital Süreçleri</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Main Chat Area -->
+        <div class="flex-grow">
+          <!-- Chat Header -->
+          <header class="flex justify-between items-center mb-8">
+            <h2 class="text-xl font-medium">Yeni Sohbet</h2>
+            <button
+              class="w-10 h-10 flex items-center justify-center text-white"
+            >
+              <i class="ri-more-2-line ri-lg"></i>
+            </button>
+          </header>
+          <!-- Chat Container -->
+          <div
+            class="chat-container rounded-2xl p-6 relative overflow-hidden mb-6"
+          >
+            <!-- Welcome Message -->
+            <div class="bg-gray-900 bg-opacity-50 rounded-xl p-4 mb-6">
+              <p class="text-center">
+                Merhaba! Seni burada görmek çok güzel 😊 Sana nasıl yardımcı
+                olabilirim?
+              </p>
+            </div>
+            <!-- Category Pills -->
+            <div class="flex flex-wrap gap-3 mb-8">
+              <button
+                class="category-btn flex items-center gap-2 px-4 py-2 rounded-full !rounded-button"
+              >
+                <i class="ri-mental-health-line"></i>
+                <span>Mental Sağlık</span>
+              </button>
+              <button
+                class="category-btn flex items-center gap-2 px-4 py-2 rounded-full !rounded-button"
+              >
+                <i class="ri-restaurant-line"></i>
+                <span>Beslenme ve Diyet</span>
+              </button>
+              <button
+                class="category-btn flex items-center gap-2 px-4 py-2 rounded-full !rounded-button"
+              >
+                <i class="ri-heart-pulse-line"></i>
+                <span>Doktor Hizmetleri</span>
+              </button>
+              <button
+                class="category-btn flex items-center gap-2 px-4 py-2 rounded-full !rounded-button"
+              >
+                <i class="ri-question-line"></i>
+                <span>Evital Nedir?</span>
+              </button>
+            </div>
+            <!-- Chat Messages Area -->
+            <div class="space-y-4 mb-8">
+              <!-- Example messages can be added here -->
+            </div>
+          </div>
+          <!-- Message Input -->
+          <div class="relative mt-auto">
+            <input
+              type="text"
+              class="message-input w-full py-3 px-4 pr-20 rounded-full text-white placeholder-gray-300 outline-none"
+              placeholder="Mesajınız buraya yazınız"
+            />
+            <div
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 flex gap-2"
+            >
+              <button
+                class="w-9 h-9 flex items-center justify-center text-white rounded-full bg-gray-700 bg-opacity-50"
+              >
+                <i class="ri-mic-line"></i>
+              </button>
+              <button
+                class="w-9 h-9 flex items-center justify-center text-white rounded-full bg-primary"
+              >
+                <i class="ri-send-plane-fill"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+        <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const moduleCards = document.querySelectorAll('.module-card');
+
+        mobileMenuBtn.addEventListener('click', function () {
+          sidebarMenu.classList.toggle('hidden');
+        });
+
+        window.addEventListener('resize', function () {
+          if (window.innerWidth >= 1024) {
+            sidebarMenu.classList.remove('hidden');
+          }
+        });
+
+        categoryButtons.forEach(button => {
+          button.addEventListener('click', function () {
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+          });
+        });
+
+        moduleCards.forEach(card => {
+          card.addEventListener('click', function () {
+            moduleCards.forEach(c => c.style.borderColor = 'rgba(255, 255, 255, 0.15)');
+            this.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+            const moduleName = this.querySelector('h3').textContent;
+            console.log(`Selected module: ${moduleName}`);
+          });
+        });
+      });
+    </script>
+    <style>
+      @media (max-width: 1024px) {
+      .module-card:hover {
+      transform: translateY(-3px);
+      }
+      }
+      .module-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      }
+      @media (min-width: 1024px) {
+      .module-card:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(5px);
+      }
+      }
+      .chat-container {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      min-height: 500px;
+      }
+      @media (max-width: 1024px) {
+      .chat-container {
+      min-height: 60vh;
+      }
+      }
+    </style>
+  </body>
+</html>

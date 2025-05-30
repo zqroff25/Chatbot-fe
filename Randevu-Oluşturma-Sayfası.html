@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evital - Randevu Oluşturma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#6b21a8",
+              secondary: "#9333ea",
+            },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+      background-image: url('static/image.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      }
+      .module-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      }
+      .module-card:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-3px);
+      }
+      .service-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      }
+      .service-card:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-5px);
+      }
+      .expert-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      }
+      .expert-card:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-3px);
+      }
+      .chat-message {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .bot-message {
+      background-color: rgba(107, 33, 168, 0.3);
+      border-color: rgba(107, 33, 168, 0.4);
+      }
+      .time-option {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.2s ease;
+      }
+      .time-option:hover, .time-option.active {
+      background-color: rgba(107, 33, 168, 0.3);
+      border-color: rgba(107, 33, 168, 0.5);
+      }
+      .duration-option {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.2s ease;
+      }
+      .duration-option:hover, .duration-option.active {
+      background-color: rgba(107, 33, 168, 0.3);
+      border-color: rgba(107, 33, 168, 0.5);
+      }
+      .step-indicator {
+      position: relative;
+      }
+      .step-indicator::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      height: 2px;
+      width: calc(100% - 2rem);
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-50%);
+      }
+      .step-indicator:last-child::after {
+      display: none;
+      }
+      .calendar-day {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      }
+      .calendar-day:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      }
+      .calendar-day.active {
+      background-color: #6b21a8;
+      }
+      .calendar-day.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+      }
+      .expert-slider {
+      scroll-behavior: smooth;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      }
+      .expert-slider::-webkit-scrollbar {
+      display: none;
+      }
+    </style>
+  </head>
+  <body class="text-white">
+    <div class="container mx-auto px-4 py-8 min-h-screen">
+      <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Mobile Header -->
+        <div class="lg:hidden flex items-center justify-between mb-6">
+                      <div class="flex items-center gap-3">
+            <a
+              href="AnaSayfa.html"
+              data-readdy="true"
+              class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+            >
+              <i class="ri-arrow-left-line ri-lg"></i>
+            </a>
+            <!-- <h1 class="text-xl font-medium">Evital</h1> -->
+          </div>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+            >
+              <i class="ri-health-book-line ri-lg"></i>
+            </div>
+            <h1 class="text-xl font-medium">Evital</h1>
+          </div>
+          <button
+            id="mobileMenuBtn"
+            class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+          >
+            <i class="ri-menu-line ri-lg"></i>
+          </button>
+        </div>
+        <!-- Left Sidebar with Modules -->
+        <div
+          id="sidebarMenu"
+          class="w-full lg:w-80 lg:flex-shrink-0 hidden lg:block"
+        >
+          <div class="lg:sticky lg:top-8">
+            <!-- Logo Area -->
+            <div class="flex items-center gap-3 mb-8">
+              <div
+                class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+              >
+                <i class="ri-health-book-line ri-lg"></i>
+              </div>
+              <h1 class="text-xl font-medium">Evital</h1>
+            </div>
+            <!-- Module List -->
+            <div class="space-y-3 mb-6 lg:mb-0">
+              <a
+                href="Randevu-İşlemleri-Sayfası.html"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-check-line"></i>
+                  </div>
+                  <h3 class="font-medium">Randevu İşlemleri</h3>
+                </div>
+              </a>
+              <a
+                href="#"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3 border-white border-opacity-50"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-todo-line"></i>
+                  </div>
+                  <h3 class="font-medium">Randevu Oluşturma</h3>
+                </div>
+              </a>
+              <a
+                href="Evital-Süreçleri-Açıklamaları.html"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3 border-white border-opacity-50"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-todo-line"></i>
+                  </div>
+                  <h3 class="font-medium">Evital Süreçleri</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Main Content Area -->
+        <div class="flex-grow">
+          <!-- Header with Steps -->
+          <div class="flex items-center justify-between mb-6">
+            <a
+              href="AnaSayfa.html"
+              data-readdy="true"
+              class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+            >
+              <i class="ri-arrow-left-line ri-lg"></i>
+            </a>
+            <h2 class="text-xl font-medium">Uzman Danışmanlık</h2>
+            <div class="w-10 h-10"></div>
+          </div>
+          <!-- Step Indicators -->
+          <div class="flex justify-between mb-8 px-4">
+            <div class="flex flex-col items-center step-indicator">
+              <div
+                class="w-8 h-8 rounded-full bg-primary flex items-center justify-center mb-2"
+              >
+                <i class="ri-check-line"></i>
+              </div>
+              <span class="text-xs text-center">Branş Seçimi</span>
+            </div>
+            <div class="flex flex-col items-center step-indicator">
+              <div
+                class="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center mb-2"
+              >
+                <span class="text-sm">2</span>
+              </div>
+              <span class="text-xs text-center">Konu Belirleme</span>
+            </div>
+            <div class="flex flex-col items-center step-indicator">
+              <div
+                class="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center mb-2"
+              >
+                <span class="text-sm">3</span>
+              </div>
+              <span class="text-xs text-center">Uzman Seçimi</span>
+            </div>
+            <div class="flex flex-col items-center step-indicator">
+              <div
+                class="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center mb-2"
+              >
+                <span class="text-sm">4</span>
+              </div>
+              <span class="text-xs text-center">Randevu</span>
+            </div>
+          </div>
+          <!-- Main Content Sections -->
+          <div id="mainContent">
+            <!-- Step 1: Service Selection -->
+            <div id="step1" class="mb-8">
+              <h3 class="text-xl font-medium mb-6">
+                Hangi branşta destek almak istiyorsunuz?
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div
+                  class="service-card p-6 rounded-xl cursor-pointer"
+                  data-service="psikolog"
+                >
+                  <div
+                    class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-30 rounded-full mb-4"
+                  >
+                    <i class="ri-mental-health-line ri-lg"></i>
+                  </div>
+                  <h4 class="text-lg font-medium mb-2">Psikolog</h4>
+                  <p class="text-sm text-gray-300">
+                    Duygusal ve zihinsel sağlığınız için profesyonel destek
+                    alın.
+                  </p>
+                </div>
+                <div
+                  class="service-card p-6 rounded-xl cursor-pointer"
+                  data-service="diyetisyen"
+                >
+                  <div
+                    class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-30 rounded-full mb-4"
+                  >
+                    <i class="ri-restaurant-line ri-lg"></i>
+                  </div>
+                  <h4 class="text-lg font-medium mb-2">Diyetisyen</h4>
+                  <p class="text-sm text-gray-300">
+                    Sağlıklı beslenme ve kişisel diyet planları için uzman
+                    desteği.
+                  </p>
+                </div>
+                <div
+                  class="service-card p-6 rounded-xl cursor-pointer"
+                  data-service="doktor"
+                >
+                  <div
+                    class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-30 rounded-full mb-4"
+                  >
+                    <i class="ri-heart-pulse-line ri-lg"></i>
+                  </div>
+                  <h4 class="text-lg font-medium mb-2">Doktor</h4>
+                  <p class="text-sm text-gray-300">
+                    Sağlık sorunlarınız için online doktor konsültasyonu.
+                  </p>
+                </div>
+              </div>
+              <div class="text-center mb-4">
+                <span class="text-sm text-gray-300">veya</span>
+              </div>
+              <div class="bg-white bg-opacity-10 rounded-xl p-4">
+                <p class="text-sm mb-3">
+                  Direkt olarak sorununuzu yazarak da başlayabilirsiniz:
+                </p>
+                <div class="relative">
+                  <textarea
+                    id="directProblemInput"
+                    class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-xl p-3 text-white placeholder-gray-400 focus:outline-none focus:border-primary resize-none"
+                    placeholder="Yaşadığınız sorunu kısaca anlatın..."
+                    rows="3"
+                  ></textarea>
+                  <button
+                    id="sendDirectProblem"
+                    class="absolute right-3 bottom-3 w-8 h-8 flex items-center justify-center bg-primary rounded-full"
+                  >
+                    <i class="ri-send-plane-fill"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Step 2: Problem Description (Initially Hidden) -->
+            <div id="step2" class="hidden mb-8">
+              <div class="flex items-center gap-2 mb-6">
+                <button
+                  id="backToStep1"
+                  class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-10 rounded-full"
+                >
+                  <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <h3 class="text-xl font-medium">
+                  <span id="selectedServiceTitle">Psikolog</span> Danışmanlığı
+                </h3>
+              </div>
+              <div class="space-y-4 mb-6">
+                <div class="chat-message bot-message p-4 rounded-xl">
+                  <p>
+                    Destek almak istediğin konudan bahsedebilirsen, sana uygun
+                    uzmanı bulabiliriz.
+                  </p>
+                </div>
+                <div class="relative">
+                  <textarea
+                    id="problemDescription"
+                    class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-xl p-3 text-white placeholder-gray-400 focus:outline-none focus:border-primary resize-none"
+                    placeholder="Sorununuzu detaylı bir şekilde anlatın..."
+                    rows="4"
+                  ></textarea>
+                  <button
+                    id="sendProblemDescription"
+                    class="absolute right-3 bottom-3 w-8 h-8 flex items-center justify-center bg-primary rounded-full"
+                  >
+                    <i class="ri-send-plane-fill"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Step 3: Duration Selection (Initially Hidden) -->
+            <div id="step3" class="hidden mb-8">
+              <div class="flex items-center gap-2 mb-6">
+                <button
+                  id="backToStep2"
+                  class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-10 rounded-full"
+                >
+                  <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <h3 class="text-xl font-medium">
+                  <span id="selectedServiceTitle2">Psikolog</span> Danışmanlığı
+                </h3>
+              </div>
+              <div class="space-y-4 mb-6">
+                <div class="chat-message bot-message p-4 rounded-xl">
+                  <p id="problemSummary">
+                    Anladığım kadarıyla kaygı ve stres konusunda destek
+                    arıyorsunuz.
+                  </p>
+                </div>
+                <div class="chat-message bot-message p-4 rounded-xl">
+                  <p>Ne zamandır bu durumu yaşıyorsunuz?</p>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                  <div
+                    class="duration-option p-3 rounded-xl text-center cursor-pointer"
+                    data-duration="1 aydan az"
+                  >
+                    <p>1 aydan az</p>
+                  </div>
+                  <div
+                    class="duration-option p-3 rounded-xl text-center cursor-pointer"
+                    data-duration="1-6 ay arası"
+                  >
+                    <p>1-6 ay arası</p>
+                  </div>
+                  <div
+                    class="duration-option p-3 rounded-xl text-center cursor-pointer"
+                    data-duration="6 aydan fazla"
+                  >
+                    <p>6 aydan fazla</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Step 4: Expert Selection (Initially Hidden) -->
+            <div id="step4" class="hidden mb-8">
+              <div class="flex items-center gap-2 mb-6">
+                <button
+                  id="backToStep3"
+                  class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-10 rounded-full"
+                >
+                  <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <h3 class="text-xl font-medium">Size Uygun Uzmanlar</h3>
+              </div>
+              <div class="chat-message bot-message p-4 rounded-xl mb-6">
+                <p>
+                  Durumunuza uygun uzmanlarımızı listeledim. İstediğiniz uzmanı
+                  seçerek randevu oluşturabilirsiniz.
+                </p>
+              </div>
+              <div class="relative mb-6">
+                <button
+                  id="slideLeft"
+                  class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-black bg-opacity-50 rounded-full"
+                >
+                  <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <div
+                  class="expert-slider flex overflow-x-auto gap-4 py-2 px-6 custom-scrollbar"
+                >
+                  <!-- Expert Cards -->
+                  <div
+                    class="expert-card flex-shrink-0 w-64 rounded-xl overflow-hidden"
+                  >
+                    <div
+                      class="relative h-40 bg-gradient-to-b from-purple-900 to-primary"
+                    >
+                      <img
+                        src="static/docimg.jpg"
+                        alt="Uzman"
+                        class="w-full h-full object-cover object-top opacity-90"
+                      />
+                      <div
+                        class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-3"
+                      >
+                        <div
+                          class="flex items-center gap-1 text-yellow-300 text-sm mb-1"
+                        >
+                          <i class="ri-star-fill"></i>
+                          <span>4.9</span>
+                          <span class="text-gray-300 text-xs"
+                            >(124 değerlendirme)</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="p-4">
+                      <h4 class="font-medium text-lg mb-1">Dr. Ayşe Yılmaz</h4>
+                      <p class="text-sm text-gray-300 mb-2">Klinik Psikolog</p>
+                      <p class="text-xs text-gray-400 mb-3">
+                        Anksiyete, Depresyon, İlişki Sorunları
+                      </p>
+                      <div class="flex gap-2">
+                        <button
+                          class="flex-1 py-2 px-3 bg-white bg-opacity-10 hover:bg-opacity-20 rounded !rounded-button text-sm whitespace-nowrap"
+                          data-expert="1"
+                          data-action="details"
+                        >
+                          Detayı İncele
+                        </button>
+                        <button
+                          class="flex-1 py-2 px-3 bg-primary rounded !rounded-button text-sm whitespace-nowrap"
+                          data-expert="1"
+                          data-action="packages"
+                        >
+                          Randevu Al
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="expert-card flex-shrink-0 w-64 rounded-xl overflow-hidden"
+                  >
+                    <div
+                      class="relative h-40 bg-gradient-to-b from-purple-900 to-primary"
+                    >
+                      <img
+                        src="static/docimg.jpg"
+                        alt="Uzman"
+                        class="w-full h-full object-cover object-top opacity-90"
+                      />
+                      <div
+                        class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-3"
+                      >
+                        <div
+                          class="flex items-center gap-1 text-yellow-300 text-sm mb-1"
+                        >
+                          <i class="ri-star-fill"></i>
+                          <span>4.7</span>
+                          <span class="text-gray-300 text-xs"
+                            >(98 değerlendirme)</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="p-4">
+                      <h4 class="font-medium text-lg mb-1">Mehmet Kaya</h4>
+                      <p class="text-sm text-gray-300 mb-2">Uzman Psikolog</p>
+                      <p class="text-xs text-gray-400 mb-3">
+                        Kaygı Bozuklukları, Stres Yönetimi
+                      </p>
+                      <div class="flex gap-2">
+                        <button
+                          class="flex-1 py-2 px-3 bg-white bg-opacity-10 hover:bg-opacity-20 rounded !rounded-button text-sm whitespace-nowrap"
+                          data-expert="2"
+                          data-action="details"
+                        >
+                          Detayı İncele
+                        </button>
+                        <button
+                          class="flex-1 py-2 px-3 bg-primary rounded !rounded-button text-sm whitespace-nowrap"
+                          data-expert="2"
+                          data-action="appointment"
+                        >
+                          Randevu Al
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="expert-card flex-shrink-0 w-64 rounded-xl overflow-hidden"
+                  >
+                    <div
+                      class="relative h-40 bg-gradient-to-b from-purple-900 to-primary"
+                    >
+                      <img
+                        src="static/docimg.jpg"
+                        alt="Uzman"
+                        class="w-full h-full object-cover object-top opacity-90"
+                      />
+                      <div
+                        class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-3"
+                      >
+                        <div
+                          class="flex items-center gap-1 text-yellow-300 text-sm mb-1"
+                        >
+                          <i class="ri-star-fill"></i>
+                          <span>4.8</span>
+                          <span class="text-gray-300 text-xs"
+                            >(156 değerlendirme)</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="p-4">
+                      <h4 class="font-medium text-lg mb-1">Zeynep Demir</h4>
+                      <p class="text-sm text-gray-300 mb-2">Klinik Psikolog</p>
+                      <p class="text-xs text-gray-400 mb-3">
+                        Depresyon, Travma, Aile Terapisi
+                      </p>
+                      <div class="flex gap-2">
+                        <button
+                          class="flex-1 py-2 px-3 bg-white bg-opacity-10 hover:bg-opacity-20 rounded !rounded-button text-sm whitespace-nowrap"
+                          data-expert="3"
+                          data-action="details"
+                        >
+                          Detayı İncele
+                        </button>
+                        <button
+                          class="flex-1 py-2 px-3 bg-primary rounded !rounded-button text-sm whitespace-nowrap"
+                          data-expert="3"
+                          data-action="appointment"
+                        >
+                          Randevu Al
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="expert-card flex-shrink-0 w-64 rounded-xl overflow-hidden"
+                  >
+                    <div
+                      class="relative h-40 bg-gradient-to-b from-purple-900 to-primary"
+                    >
+                      <img
+                        src="static/docimg.jpg"
+                        alt="Uzman"
+                        class="w-full h-full object-cover object-top opacity-90"
+                      />
+                      <div
+                        class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-3"
+                      >
+                        <div
+                          class="flex items-center gap-1 text-yellow-300 text-sm mb-1"
+                        >
+                          <i class="ri-star-fill"></i>
+                          <span>4.6</span>
+                          <span class="text-gray-300 text-xs"
+                            >(87 değerlendirme)</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="p-4">
+                      <h4 class="font-medium text-lg mb-1">Ahmet Öztürk</h4>
+                      <p class="text-sm text-gray-300 mb-2">Uzman Psikolog</p>
+                      <p class="text-xs text-gray-400 mb-3">
+                        Anksiyete, Panik Atak, Fobiler
+                      </p>
+                      <div class="flex gap-2">
+                        <button
+                          class="flex-1 py-2 px-3 bg-white bg-opacity-10 hover:bg-opacity-20 rounded !rounded-button text-sm whitespace-nowrap"
+                          data-expert="4"
+                          data-action="details"
+                        >
+                          Detayı İncele
+                        </button>
+                        <button
+                          class="flex-1 py-2 px-3 bg-primary rounded !rounded-button text-sm whitespace-nowrap"
+                          data-expert="4"
+                          data-action="appointment"
+                        >
+                          Randevu Al
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  id="slideRight"
+                  class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-black bg-opacity-50 rounded-full"
+                >
+                  <i class="ri-arrow-right-s-line"></i>
+                </button>
+              </div>
+            </div>
+            <!-- Package Selection Step -->
+            <div id="packageStep" class="hidden mb-8">
+              <div class="flex items-center gap-2 mb-6">
+                <button
+                  id="backToStep4"
+                  class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-10 rounded-full"
+                >
+                  <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <h3 class="text-xl font-medium">Seans Paketleri</h3>
+              </div>
+
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
+              >
+                <div
+                  class="package-card bg-white bg-opacity-10 rounded-xl p-5 cursor-pointer hover:bg-opacity-20 transition-all"
+                >
+                  <div class="flex items-center justify-between mb-3">
+                    <h4 class="font-medium">Tek Seans</h4>
+                    <span
+                      class="text-xs bg-primary bg-opacity-20 px-2 py-1 rounded-full"
+                      >45 Dakika</span
+                    >
+                  </div>
+                  <div class="text-2xl font-medium mb-2">₺799</div>
+                  <ul class="text-sm text-gray-300 space-y-2 mb-4">
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>Online görüşme</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>Ücretsiz iptal hakkı</span>
+                    </li>
+                  </ul>
+                  <button
+                    class="w-full py-2 bg-primary rounded !rounded-button text-sm whitespace-nowrap"
+                    data-package="1"
+                    data-sessions="1"
+                    data-price="799"
+                  >
+                    Seç
+                  </button>
+                </div>
+
+                <div
+                  class="package-card bg-white bg-opacity-10 rounded-xl p-5 cursor-pointer hover:bg-opacity-20 transition-all"
+                >
+                  <div class="flex items-center justify-between mb-3">
+                    <h4 class="font-medium">2'li Paket</h4>
+                    <span
+                      class="text-xs bg-primary bg-opacity-20 px-2 py-1 rounded-full"
+                      >45 Dakika</span
+                    >
+                  </div>
+                  <div class="text-2xl font-medium mb-2">
+                    ₺750 <span class="text-sm text-gray-300">/seans</span>
+                  </div>
+                  <ul class="text-sm text-gray-300 space-y-2 mb-4">
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>2 seans görüşme</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>%6 indirim</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>3 ay geçerlilik</span>
+                    </li>
+                  </ul>
+                  <button
+                    class="w-full py-2 bg-primary rounded !rounded-button text-sm whitespace-nowrap"
+                    data-package="2"
+                    data-sessions="2"
+                    data-price="750"
+                  >
+                    Seç
+                  </button>
+                </div>
+
+                <div
+                  class="package-card bg-white bg-opacity-10 rounded-xl p-5 cursor-pointer hover:bg-opacity-20 transition-all relative overflow-hidden"
+                >
+                  <div
+                    class="absolute -right-8 top-5 bg-primary px-8 py-1 rotate-45 text-xs font-medium"
+                  >
+                    Popüler
+                  </div>
+                  <div class="flex items-center justify-between mb-3">
+                    <h4 class="font-medium">4'lü Paket</h4>
+                    <span
+                      class="text-xs bg-primary bg-opacity-20 px-2 py-1 rounded-full"
+                      >45 Dakika</span
+                    >
+                  </div>
+                  <div class="text-2xl font-medium mb-2">
+                    ₺700 <span class="text-sm text-gray-300">/seans</span>
+                  </div>
+                  <ul class="text-sm text-gray-300 space-y-2 mb-4">
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>4 seans görüşme</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>%12 indirim</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>6 ay geçerlilik</span>
+                    </li>
+                  </ul>
+                  <button
+                    class="w-full py-2 bg-primary rounded !rounded-button text-sm whitespace-nowrap"
+                    data-package="3"
+                    data-sessions="4"
+                    data-price="700"
+                  >
+                    Seç
+                  </button>
+                </div>
+
+                <div
+                  class="package-card bg-white bg-opacity-10 rounded-xl p-5 cursor-pointer hover:bg-opacity-20 transition-all"
+                >
+                  <div class="flex items-center justify-between mb-3">
+                    <h4 class="font-medium">8'li Paket</h4>
+                    <span
+                      class="text-xs bg-primary bg-opacity-20 px-2 py-1 rounded-full"
+                      >45 Dakika</span
+                    >
+                  </div>
+                  <div class="text-2xl font-medium mb-2">
+                    ₺650 <span class="text-sm text-gray-300">/seans</span>
+                  </div>
+                  <ul class="text-sm text-gray-300 space-y-2 mb-4">
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>8 seans görüşme</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>%19 indirim</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="ri-check-line text-green-400"></i>
+                      <span>12 ay geçerlilik</span>
+                    </li>
+                  </ul>
+                  <button
+                    class="w-full py-2 bg-primary rounded !rounded-button text-sm whitespace-nowrap"
+                    data-package="4"
+                    data-sessions="8"
+                    data-price="650"
+                  >
+                    Seç
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 5: Appointment Form (Initially Hidden) -->
+            <div id="step5" class="hidden mb-8">
+              <div class="flex items-center gap-2 mb-6">
+                <button
+                  id="backToPackages"
+                  class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-10 rounded-full"
+                >
+                  <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <h3 class="text-xl font-medium">Randevu Oluştur</h3>
+                <div class="ml-auto text-sm">
+                  <span
+                    id="remainingSessions"
+                    class="bg-primary bg-opacity-20 px-3 py-1 rounded-full"
+                    >4 Seans</span
+                  >
+                </div>
+              </div>
+              <div class="bg-white bg-opacity-10 rounded-xl p-5 mb-6">
+                <div class="flex items-center gap-4 mb-4">
+                  <div
+                    class="w-16 h-16 rounded-full overflow-hidden bg-primary"
+                  >
+                    <img
+                      id="selectedExpertImage"
+                      src="static/docimg.jpg"
+                      alt="Uzman"
+                      class="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                  <div>
+                    <h4 id="selectedExpertName" class="font-medium text-lg">
+                      Dr. Ayşe Yılmaz
+                    </h4>
+                    <p id="selectedExpertTitle" class="text-sm text-gray-300">
+                      Klinik Psikolog
+                    </p>
+                  </div>
+                </div>
+                <div class="border-t border-white border-opacity-10 pt-4">
+                  <h5 class="font-medium mb-3">Tarih Seçin</h5>
+                  <div
+                    class="flex gap-2 overflow-x-auto pb-2 mb-4 custom-scrollbar"
+                  >
+                    <div class="calendar-day disabled">
+                      <span>23</span>
+                    </div>
+                    <div class="calendar-day">
+                      <span>24</span>
+                    </div>
+                    <div class="calendar-day">
+                      <span>25</span>
+                    </div>
+                    <div class="calendar-day">
+                      <span>26</span>
+                    </div>
+                    <div class="calendar-day active">
+                      <span>27</span>
+                    </div>
+                    <div class="calendar-day">
+                      <span>28</span>
+                    </div>
+                    <div class="calendar-day">
+                      <span>29</span>
+                    </div>
+                    <div class="calendar-day">
+                      <span>30</span>
+                    </div>
+                    <div class="calendar-day">
+                      <span>31</span>
+                    </div>
+                    <div class="calendar-day">
+                      <span>1</span>
+                    </div>
+                    <div class="calendar-day">
+                      <span>2</span>
+                    </div>
+                  </div>
+                  <h5 class="font-medium mb-3">Saat Seçin</h5>
+                  <div class="grid grid-cols-4 gap-2 mb-4">
+                    <div
+                      class="time-option p-2 rounded text-center text-sm cursor-pointer"
+                    >
+                      <span>09:00</span>
+                    </div>
+                    <div
+                      class="time-option p-2 rounded text-center text-sm cursor-pointer"
+                    >
+                      <span>10:00</span>
+                    </div>
+                    <div
+                      class="time-option p-2 rounded text-center text-sm cursor-pointer active"
+                    >
+                      <span>11:00</span>
+                    </div>
+                    <div
+                      class="time-option p-2 rounded text-center text-sm cursor-pointer"
+                    >
+                      <span>12:00</span>
+                    </div>
+                    <div
+                      class="time-option p-2 rounded text-center text-sm cursor-pointer"
+                    >
+                      <span>14:00</span>
+                    </div>
+                    <div
+                      class="time-option p-2 rounded text-center text-sm cursor-pointer"
+                    >
+                      <span>15:00</span>
+                    </div>
+                    <div
+                      class="time-option p-2 rounded text-center text-sm cursor-pointer"
+                    >
+                      <span>16:00</span>
+                    </div>
+                    <div
+                      class="time-option p-2 rounded text-center text-sm cursor-pointer"
+                    >
+                      <span>17:00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white bg-opacity-10 rounded-xl p-5 mb-6">
+                <h4 class="font-medium mb-4">Ödeme Bilgileri</h4>
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm mb-1">Fatura Adresi</label>
+                    <textarea
+                      class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:border-primary resize-none"
+                      placeholder="Fatura adresinizi giriniz..."
+                      rows="2"
+                    ></textarea>
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1"
+                      >Kart Üzerindeki İsim</label
+                    >
+                    <input
+                      type="text"
+                      class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:border-primary"
+                      placeholder="Kart üzerindeki ismi giriniz"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1">Kart Numarası</label>
+                    <div class="relative">
+                      <input
+                        type="text"
+                        maxlength="19"
+                        class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg p-3 pl-12 text-white placeholder-gray-400 focus:outline-none focus:border-primary"
+                        placeholder="XXXX XXXX XXXX XXXX"
+                      />
+                      <div
+                        class="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2"
+                      >
+                        <i class="ri-bank-card-line text-gray-400"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-sm mb-1"
+                        >Son Kullanım Tarihi</label
+                      >
+                      <input
+                        type="text"
+                        maxlength="5"
+                        class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:border-primary"
+                        placeholder="AA/YY"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm mb-1">CVV</label>
+                      <div class="relative">
+                        <input
+                          type="text"
+                          maxlength="3"
+                          class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:border-primary"
+                          placeholder="XXX"
+                        />
+                        <div
+                          class="absolute right-3 top-1/2 transform -translate-y-1/2"
+                        >
+                          <i
+                            class="ri-question-line text-gray-400 cursor-help"
+                            title="Kartınızın arkasındaki 3 haneli güvenlik kodu"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1">Taksit Seçenekleri</label>
+                    <div class="grid grid-cols-3 gap-3">
+                      <div
+                        class="time-option p-2 rounded text-center text-sm cursor-pointer active"
+                      >
+                        <span>Tek Çekim</span>
+                      </div>
+                      <div
+                        class="time-option p-2 rounded text-center text-sm cursor-pointer"
+                      >
+                        <span>3 Taksit</span>
+                      </div>
+                      <div
+                        class="time-option p-2 rounded text-center text-sm cursor-pointer"
+                      >
+                        <span>6 Taksit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1">İndirim Kuponu</label>
+                    <div class="flex gap-2">
+                      <input
+                        type="text"
+                        class="flex-grow bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:border-primary uppercase"
+                        placeholder="Kupon kodunuz"
+                      />
+                      <button
+                        class="px-4 py-2 bg-primary hover:bg-opacity-90 rounded-lg !rounded-button font-medium whitespace-nowrap"
+                      >
+                        Uygula
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-between items-center">
+                <div class="text-sm">
+                  <p class="font-medium">
+                    Toplam Ücret:
+                    <span id="totalPrice" class="text-lg">₺2,800</span>
+                  </p>
+                  <p class="text-xs text-gray-400">
+                    <span id="sessionInfo">4 seans</span> x 45 dakika görüşme
+                  </p>
+                </div>
+                <button
+                  id="confirmAppointment"
+                  class="py-3 px-6 bg-primary hover:bg-opacity-90 rounded-lg !rounded-button font-medium whitespace-nowrap"
+                >
+                  Randevuyu Onayla
+                </button>
+              </div>
+            </div>
+            <!-- Expert Details Modal (Initially Hidden) -->
+            <div
+              id="expertDetailsModal"
+              class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4 hidden"
+            >
+              <div
+                class="bg-gradient-to-br from-purple-900 to-primary bg-opacity-90 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              >
+                <div class="p-6">
+                  <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-medium">Uzman Detayları</h3>
+                    <button
+                      id="closeExpertDetails"
+                      class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-10 rounded-full"
+                    >
+                      <i class="ri-close-line"></i>
+                    </button>
+                  </div>
+                  <div class="flex flex-col md:flex-row gap-6 mb-6">
+                    <div class="w-full md:w-1/3">
+                      <div class="rounded-xl overflow-hidden mb-4">
+                        <img
+                          id="modalExpertImage"
+                          src="static/docimg.jpg"
+                          alt="Uzman"
+                          class="w-full h-auto object-cover"
+                        />
+                      </div>
+                      <div
+                        class="flex items-center gap-1 text-yellow-300 text-sm mb-2"
+                      >
+                        <i class="ri-star-fill"></i>
+                        <span id="modalExpertRating">4.9</span>
+                        <span
+                          class="text-gray-300 text-xs"
+                          id="modalExpertReviewCount"
+                          >(124 değerlendirme)</span
+                        >
+                      </div>
+                      <button
+                        class="w-full py-3 bg-primary rounded !rounded-button font-medium whitespace-nowrap"
+                        id="modalAppointmentBtn"
+                      >
+                        Randevu Al
+                      </button>
+                    </div>
+                    <div class="w-full md:w-2/3">
+                      <h4 id="modalExpertName" class="text-xl font-medium mb-1">
+                        Dr. Ayşe Yılmaz
+                      </h4>
+                      <p id="modalExpertTitle" class="text-gray-300 mb-4">
+                        Klinik Psikolog
+                      </p>
+                      <h5 class="font-medium mb-2">Uzmanlık Alanları</h5>
+                      <div class="flex flex-wrap gap-2 mb-4">
+                        <span
+                          class="bg-white bg-opacity-10 px-3 py-1 rounded-full text-sm"
+                          >Anksiyete</span
+                        >
+                        <span
+                          class="bg-white bg-opacity-10 px-3 py-1 rounded-full text-sm"
+                          >Depresyon</span
+                        >
+                        <span
+                          class="bg-white bg-opacity-10 px-3 py-1 rounded-full text-sm"
+                          >İlişki Sorunları</span
+                        >
+                        <span
+                          class="bg-white bg-opacity-10 px-3 py-1 rounded-full text-sm"
+                          >Stres Yönetimi</span
+                        >
+                        <span
+                          class="bg-white bg-opacity-10 px-3 py-1 rounded-full text-sm"
+                          >Travma</span
+                        >
+                      </div>
+                      <h5 class="font-medium mb-2">Hakkında</h5>
+                      <p class="text-sm text-gray-300 mb-4" id="modalExpertBio">
+                        10 yıllık klinik deneyime sahip uzman psikolog. İstanbul
+                        Üniversitesi Psikoloji Bölümü mezunu ve aynı
+                        üniversitede klinik psikoloji yüksek lisansını
+                        tamamladı. Bilişsel Davranışçı Terapi, EMDR ve Şema
+                        Terapi eğitimlerini tamamladı. Özellikle anksiyete
+                        bozuklukları, depresyon ve ilişki sorunları konularında
+                        uzmanlaşmıştır.
+                      </p>
+                      <h5 class="font-medium mb-2">Eğitim</h5>
+                      <ul class="text-sm text-gray-300 mb-4 space-y-2">
+                        <li class="flex items-start gap-2">
+                          <i class="ri-graduation-cap-line mt-1"></i>
+                          <span
+                            >İstanbul Üniversitesi, Klinik Psikoloji Yüksek
+                            Lisans</span
+                          >
+                        </li>
+                        <li class="flex items-start gap-2">
+                          <i class="ri-graduation-cap-line mt-1"></i>
+                          <span>İstanbul Üniversitesi, Psikoloji Lisans</span>
+                        </li>
+                      </ul>
+                      <h5 class="font-medium mb-2">Hasta Yorumları</h5>
+                      <div class="space-y-3">
+                        <div class="bg-white bg-opacity-10 p-3 rounded">
+                          <div
+                            class="flex items-center gap-1 text-yellow-300 text-sm mb-1"
+                          >
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                          </div>
+                          <p class="text-sm">
+                            "Çok ilgili ve anlayışlı bir yaklaşımı var. Kaygı
+                            sorunlarımla başa çıkmamda büyük destek oldu."
+                          </p>
+                          <p class="text-xs text-gray-400 mt-1">
+                            Berna K. - 2 ay önce
+                          </p>
+                        </div>
+                        <div class="bg-white bg-opacity-10 p-3 rounded">
+                          <div
+                            class="flex items-center gap-1 text-yellow-300 text-sm mb-1"
+                          >
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                          </div>
+                          <p class="text-sm">
+                            "Profesyonel yaklaşımı ve samimiyeti ile kendimi çok
+                            rahat hissettim. Kesinlikle tavsiye ederim."
+                          </p>
+                          <p class="text-xs text-gray-400 mt-1">
+                            Emre T. - 1 ay önce
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Success Modal (Initially Hidden) -->
+            <div
+              id="successModal"
+              class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4 hidden"
+            >
+              <div
+                class="bg-gradient-to-br from-purple-900 to-primary bg-opacity-90 rounded-2xl w-full max-w-md text-center p-8"
+              >
+                <div
+                  class="w-20 h-20 bg-green-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6"
+                >
+                  <i class="ri-check-line ri-2x"></i>
+                </div>
+                <h3 class="text-xl font-medium mb-2">
+                  Randevunuz Oluşturuldu!
+                </h3>
+                <p class="text-gray-300 mb-6">
+                  27 Mayıs 2025, Salı günü saat 11:00'de Dr. Ayşe Yılmaz ile
+                  randevunuz onaylandı.
+                </p>
+                <p class="text-sm text-gray-400 mb-6">
+                  Randevu detayları e-posta adresinize gönderildi. Randevunuzu
+                  "Randevu İşlemleri" sayfasından görüntüleyebilir veya iptal
+                  edebilirsiniz.
+                </p>
+                <div class="flex gap-4">
+                  <a
+                    href="#"
+                    data-readdy="true"
+                    class="flex-1 py-3 bg-white bg-opacity-10 hover:bg-opacity-20 rounded !rounded-button font-medium whitespace-nowrap"
+                    >Randevularım</a
+                  >
+                  <button
+                    id="closeSuccessModal"
+                    class="flex-1 py-3 bg-primary hover:bg-opacity-90 rounded !rounded-button font-medium whitespace-nowrap"
+                  >
+                    Tamam
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script id="navigationScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const sidebarMenu = document.getElementById("sidebarMenu");
+        mobileMenuBtn.addEventListener("click", function () {
+          sidebarMenu.classList.toggle("hidden");
+        });
+        window.addEventListener("resize", function () {
+          if (window.innerWidth >= 1024) {
+            sidebarMenu.classList.remove("hidden");
+          }
+        });
+      });
+    </script>
+    <script id="appointmentFlowScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        // Step navigation elements
+        const step1 = document.getElementById("step1");
+        const step2 = document.getElementById("step2");
+        const step3 = document.getElementById("step3");
+        const step4 = document.getElementById("step4");
+        const step5 = document.getElementById("step5");
+        // Service selection
+        const serviceCards = document.querySelectorAll(".service-card");
+        const selectedServiceTitle = document.getElementById("selectedServiceTitle");
+        const selectedServiceTitle2 = document.getElementById(
+          "selectedServiceTitle2",
+        );
+        const sendDirectProblem = document.getElementById("sendDirectProblem");
+        const directProblemInput = document.getElementById("directProblemInput");
+        // Problem description
+        const backToStep1 = document.getElementById("backToStep1");
+        const sendProblemDescription = document.getElementById(
+          "sendProblemDescription",
+        );
+        const problemDescription = document.getElementById("problemDescription");
+        // Duration selection
+        const backToStep2 = document.getElementById("backToStep2");
+        const durationOptions = document.querySelectorAll(".duration-option");
+        const problemSummary = document.getElementById("problemSummary");
+        // Expert selection
+        const backToStep3 = document.getElementById("backToStep3");
+        const expertButtons = document.querySelectorAll("[data-action]");
+        const slideLeft = document.getElementById("slideLeft");
+        const slideRight = document.getElementById("slideRight");
+        // Appointment form
+        const backToStep4 = document.getElementById("backToStep4");
+        const calendarDays = document.querySelectorAll(".calendar-day");
+        const timeOptions = document.querySelectorAll(".time-option");
+        const confirmAppointment = document.getElementById("confirmAppointment");
+        // Expert details modal
+        const expertDetailsModal = document.getElementById("expertDetailsModal");
+        const closeExpertDetails = document.getElementById("closeExpertDetails");
+        const modalAppointmentBtn = document.getElementById("modalAppointmentBtn");
+        // Success modal
+        const successModal = document.getElementById("successModal");
+        const closeSuccessModal = document.getElementById("closeSuccessModal");
+        // Step 1: Service selection
+        serviceCards.forEach((card) => {
+          card.addEventListener("click", function () {
+            const service = this.dataset.service;
+            selectedServiceTitle.textContent = this.querySelector("h4").textContent;
+            selectedServiceTitle2.textContent = this.querySelector("h4").textContent;
+            step1.classList.add("hidden");
+            step2.classList.remove("hidden");
+          });
+        });
+        sendDirectProblem.addEventListener("click", function () {
+          if (directProblemInput.value.trim() !== "") {
+            step1.classList.add("hidden");
+            step2.classList.remove("hidden");
+            problemDescription.value = directProblemInput.value;
+          }
+        });
+        // Step 2: Problem description
+        backToStep1.addEventListener("click", function () {
+          step2.classList.add("hidden");
+          step1.classList.remove("hidden");
+        });
+        sendProblemDescription.addEventListener("click", function () {
+          if (problemDescription.value.trim() !== "") {
+            problemSummary.textContent = `Anladığım kadarıyla ${problemDescription.value.substring(0, 50)}${problemDescription.value.length > 50 ? "..." : ""} konusunda destek arıyorsunuz.`;
+            step2.classList.add("hidden");
+            step3.classList.remove("hidden");
+          }
+        });
+        // Step 3: Duration selection
+        backToStep2.addEventListener("click", function () {
+          step3.classList.add("hidden");
+          step2.classList.remove("hidden");
+        });
+        durationOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            durationOptions.forEach((opt) => opt.classList.remove("active"));
+            this.classList.add("active");
+            setTimeout(() => {
+              step3.classList.add("hidden");
+              step4.classList.remove("hidden");
+            }, 500);
+          });
+        });
+        // Step 4: Expert selection
+        backToStep3.addEventListener("click", function () {
+          step4.classList.add("hidden");
+          step3.classList.remove("hidden");
+        });
+        expertButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const action = this.dataset.action;
+            const expertId = this.dataset.expert;
+            if (action === "details") {
+              // Update modal content based on expert ID
+              const expertCard = this.closest(".expert-card");
+              const expertImage = expertCard.querySelector("img").src;
+              const expertName = expertCard.querySelector("h4").textContent;
+              const expertTitle =
+                expertCard.querySelector("p:nth-of-type(1)").textContent;
+              document.getElementById("modalExpertImage").src = expertImage;
+              document.getElementById("modalExpertName").textContent = expertName;
+              document.getElementById("modalExpertTitle").textContent = expertTitle;
+              expertDetailsModal.classList.remove("hidden");
+            } else if (action === "appointment") {
+              // Update appointment form based on expert ID
+              const expertCard = this.closest(".expert-card");
+              const expertImage = expertCard.querySelector("img").src;
+              const expertName = expertCard.querySelector("h4").textContent;
+              const expertTitle =
+                expertCard.querySelector("p:nth-of-type(1)").textContent;
+              document.getElementById("selectedExpertImage").src = expertImage;
+              document.getElementById("selectedExpertName").textContent = expertName;
+              document.getElementById("selectedExpertTitle").textContent =
+                expertTitle;
+              step4.classList.add("hidden");
+              step5.classList.remove("hidden");
+            }
+          });
+        });
+        slideLeft.addEventListener("click", function () {
+          const slider = document.querySelector(".expert-slider");
+          slider.scrollBy({ left: -300, behavior: "smooth" });
+        });
+        slideRight.addEventListener("click", function () {
+          const slider = document.querySelector(".expert-slider");
+          slider.scrollBy({ left: 300, behavior: "smooth" });
+        });
+        // Expert details modal
+        closeExpertDetails.addEventListener("click", function () {
+          expertDetailsModal.classList.add("hidden");
+        });
+        modalAppointmentBtn.addEventListener("click", function () {
+          const expertName = document.getElementById("modalExpertName").textContent;
+          const expertTitle = document.getElementById("modalExpertTitle").textContent;
+          const expertImage = document.getElementById("modalExpertImage").src;
+          document.getElementById("selectedExpertImage").src = expertImage;
+          document.getElementById("selectedExpertName").textContent = expertName;
+          document.getElementById("selectedExpertTitle").textContent = expertTitle;
+          expertDetailsModal.classList.add("hidden");
+          step4.classList.add("hidden");
+          step5.classList.remove("hidden");
+        });
+        // Step 5: Appointment form
+        backToStep4.addEventListener("click", function () {
+          step5.classList.add("hidden");
+          step4.classList.remove("hidden");
+        });
+        calendarDays.forEach((day) => {
+          if (!day.classList.contains("disabled")) {
+            day.addEventListener("click", function () {
+              calendarDays.forEach((d) => d.classList.remove("active"));
+              this.classList.add("active");
+            });
+          }
+        });
+        timeOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            timeOptions.forEach((opt) => opt.classList.remove("active"));
+            this.classList.add("active");
+          });
+        });
+        confirmAppointment.addEventListener("click", function () {
+          successModal.classList.remove("hidden");
+        });
+        // Success modal
+        closeSuccessModal.addEventListener("click", function () {
+          successModal.classList.add("hidden");
+          // Reset to step 1
+          step5.classList.add("hidden");
+          step1.classList.remove("hidden");
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evital - Randevu İşlemleri</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#9333ea",
+              secondary: "#6b21a8",
+            },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+      background: url('static/image.png') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      }
+      .module-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      }
+      @media (min-width: 1024px) {
+      .module-card:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(5px);
+      }
+      }
+      @media (max-width: 1024px) {
+      .module-card:hover {
+      transform: translateY(-3px);
+      }
+      }
+      .appointment-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      }
+      .appointment-card:hover {
+      transform: translateY(-3px);
+      }
+      .status-confirmed {
+      background-color: rgba(16, 185, 129, 0.2);
+      }
+      .status-pending {
+      background-color: rgba(245, 158, 11, 0.2);
+      }
+      .status-completed {
+      background-color: rgba(156, 163, 175, 0.2);
+      }
+      .filter-container {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .search-input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .tab-button {
+      background-color: rgba(255, 255, 255, 0.1);
+      }
+      .tab-button.active {
+      background-color: rgba(147, 51, 234, 0.3);
+      border-color: rgba(147, 51, 234, 0.5);
+      }
+      .custom-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+      background-size: 1.5em 1.5em;
+      }
+      .date-input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    </style>
+  </head>
+  <body class="text-white">
+    <div class="container mx-auto px-4 py-8 min-h-screen">
+      <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Mobile Header -->
+        <div class="lg:hidden flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+            <a
+              href="AnaSayfa.html"
+              data-readdy="true"
+              class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+            >
+              <i class="ri-arrow-left-line ri-lg"></i>
+            </a>
+            <h1 class="text-xl font-medium">Evital</h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+            >
+              <i class="ri-health-book-line ri-lg"></i>
+            </div>
+            <!-- <h1 class="text-xl font-medium">Evital</h1> -->
+          </div>
+          <button
+            id="mobileMenuBtn"
+            class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+          >
+            <i class="ri-menu-line ri-lg"></i>
+          </button>
+        </div>
+        <!-- Left Sidebar with Modules -->
+        <div
+          id="sidebarMenu"
+          class="w-full lg:w-80 lg:flex-shrink-0 hidden lg:block"
+        >
+          <div class="lg:sticky lg:top-8">
+            <!-- Logo Area -->
+            <div class="flex items-center gap-3 mb-8">
+              <div
+                class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+              >
+                <i class="ri-health-book-line ri-lg"></i>
+              </div>
+              <h1 class="text-xl font-medium">Evital</h1>
+            </div>
+            <!-- Module List -->
+            <div class="space-y-3 mb-6 lg:mb-0">
+              <a
+                href="#"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3 border-primary border-opacity-50"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-check-line"></i>
+                  </div>
+                  <h3 class="font-medium">Randevu İşlemleri</h3>
+                </div>
+              </a>
+              <a
+                href="Randevu-Oluşturma-Sayfası.html"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-todo-line"></i>
+                  </div>
+                  <h3 class="font-medium">Randevu Oluşturma</h3>
+                </div>
+              </a>
+              <a
+                href="Evital-Süreçleri-Açıklamaları.html"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-user-search-line"></i>
+                  </div>
+                  <h3 class="font-medium">Evital Süreçleri</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Main Content Area -->
+        <div class="flex-grow">
+          <!-- Page Header -->
+          <header class="flex justify-between items-center mb-6">
+            <div class="flex items-center gap-3">
+              <a
+                href="AnaSayfa.html"
+                data-readdy="true"
+                class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+              >
+                <i class="ri-arrow-left-line ri-lg"></i>
+              </a>
+              <h2 class="text-xl font-medium">Randevu İşlemleri</h2>
+            </div>
+            <div class="w-10 h-10 flex items-center justify-center text-white">
+              <i class="ri-question-line ri-lg"></i>
+            </div>
+          </header>
+          <!-- Tabs -->
+          <div class="flex mb-6">
+            <button
+              class="tab-button active flex-1 py-3 px-4 rounded-tl-lg rounded-bl-lg border border-r-0 border-transparent text-center font-medium"
+              data-tab="active"
+            >
+              Aktif Randevular
+            </button>
+            <button
+              class="tab-button flex-1 py-3 px-4 rounded-tr-lg rounded-br-lg border border-transparent text-center font-medium"
+              data-tab="past"
+            >
+              Geçmiş Randevular
+            </button>
+          </div>
+          <!-- Filter Section -->
+          <div class="filter-container p-4 rounded-xl mb-6">
+            <div class="flex flex-col md:flex-row gap-4">
+              <div class="flex-grow">
+                <div class="relative">
+                  <input
+                    type="text"
+                    placeholder="Randevu veya uzman ara..."
+                    class="search-input w-full py-3 px-4 pl-10 rounded-lg text-white placeholder-gray-300 outline-none text-sm"
+                  />
+                  <div
+                    class="absolute left-3 top-1/2 transform -translate-y-1/2"
+                  >
+                    <i class="ri-search-line text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-3">
+                <div class="w-full md:w-auto">
+                  <select
+                    class="custom-select bg-transparent border border-gray-500 rounded-lg px-3 py-2.5 text-white w-full md:w-40 text-sm pr-8"
+                  >
+                    <option value="" selected disabled class="bg-gray-800">
+                      Durum
+                    </option>
+                    <option value="confirmed" class="bg-gray-800">
+                      Onaylandı
+                    </option>
+                    <option value="pending" class="bg-gray-800">
+                      Beklemede
+                    </option>
+                    <option value="completed" class="bg-gray-800">
+                      Tamamlandı
+                    </option>
+                  </select>
+                </div>
+                <div class="w-full md:w-auto">
+                  <select
+                    class="custom-select bg-transparent border border-gray-500 rounded-lg px-3 py-2.5 text-white w-full md:w-40 text-sm pr-8"
+                  >
+                    <option value="" selected disabled class="bg-gray-800">
+                      Uzman
+                    </option>
+                    <option value="all" class="bg-gray-800">
+                      Tüm Uzmanlar
+                    </option>
+                    <option value="psikolog" class="bg-gray-800">
+                      Psikolog
+                    </option>
+                    <option value="diyetisyen" class="bg-gray-800">
+                      Diyetisyen
+                    </option>
+                    <option value="fizyoterapist" class="bg-gray-800">
+                      Fizyoterapist
+                    </option>
+                  </select>
+                </div>
+                <div class="w-full md:w-auto">
+                  <input
+                    type="date"
+                    class="date-input bg-transparent border border-gray-500 rounded-lg px-3 py-2 text-white w-full md:w-40 text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Appointment List - Active Tab -->
+          <div id="active-appointments" class="tab-content active">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Appointment Card 1 -->
+              <div class="appointment-card p-4 rounded-xl">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-sm text-gray-300"
+                      >23 Mayıs 2025, Cuma</span
+                    >
+                    <h3 class="text-lg font-medium">14:30 - 15:30</h3>
+                  </div>
+                  <div
+                    class="status-confirmed px-3 py-1 rounded-full text-xs font-medium text-green-400"
+                  >
+                    Onaylandı
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 mb-4">
+                  <div
+                    class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+                  >
+                    <i class="ri-user-line"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-medium">Dr. Ayşe Yılmaz</h4>
+                    <p class="text-sm text-gray-300">Klinik Psikolog</p>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <div>
+                    <span class="text-xs text-gray-300"
+                      >Görüşme Tipi: Online</span
+                    >
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      class="px-3 py-1.5 flex items-center gap-1.5 bg-gray-700 bg-opacity-30 rounded-lg !rounded-button whitespace-nowrap text-xs"
+                    >
+                      <i class="ri-calendar-line"></i>
+                      <span>Tarih Değiştir</span>
+                    </button>
+                    <button
+                      class="px-3 py-1.5 flex items-center gap-1.5 bg-red-500 bg-opacity-30 rounded-lg !rounded-button whitespace-nowrap text-xs"
+                    >
+                      <i class="ri-close-line"></i>
+                      <span>Randevuyu İptal Et</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Appointment Card 2 -->
+              <div class="appointment-card p-4 rounded-xl">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-sm text-gray-300"
+                      >25 Mayıs 2025, Pazar</span
+                    >
+                    <h3 class="text-lg font-medium">10:00 - 11:00</h3>
+                  </div>
+                  <div
+                    class="status-pending px-3 py-1 rounded-full text-xs font-medium text-yellow-400"
+                  >
+                    Beklemede
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 mb-4">
+                  <div
+                    class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+                  >
+                    <i class="ri-user-line"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-medium">Mehmet Kaya</h4>
+                    <p class="text-sm text-gray-300">Diyetisyen</p>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <div>
+                    <span class="text-xs text-gray-300"
+                      >Görüşme Tipi: Yüz Yüze</span
+                    >
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      class="px-3 py-1.5 flex items-center gap-1.5 bg-gray-700 bg-opacity-30 rounded-lg !rounded-button whitespace-nowrap text-xs"
+                    >
+                      <i class="ri-calendar-line"></i>
+                      <span>Tarih Değiştir</span>
+                    </button>
+                    <button
+                      class="px-3 py-1.5 flex items-center gap-1.5 bg-red-500 bg-opacity-30 rounded-lg !rounded-button whitespace-nowrap text-xs"
+                    >
+                      <i class="ri-close-line"></i>
+                      <span>Randevuyu İptal Et</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Appointment Card 3 -->
+              <div class="appointment-card p-4 rounded-xl">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-sm text-gray-300"
+                      >27 Mayıs 2025, Salı</span
+                    >
+                    <h3 class="text-lg font-medium">16:00 - 17:00</h3>
+                  </div>
+                  <div
+                    class="status-confirmed px-3 py-1 rounded-full text-xs font-medium text-green-400"
+                  >
+                    Onaylandı
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 mb-4">
+                  <div
+                    class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+                  >
+                    <i class="ri-user-line"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-medium">Dr. Zeynep Demir</h4>
+                    <p class="text-sm text-gray-300">Fizyoterapist</p>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <div>
+                    <span class="text-xs text-gray-300"
+                      >Görüşme Tipi: Online</span
+                    >
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      class="px-3 py-1.5 flex items-center gap-1.5 bg-gray-700 bg-opacity-30 rounded-lg !rounded-button whitespace-nowrap text-xs"
+                    >
+                      <i class="ri-calendar-line"></i>
+                      <span>Tarih Değiştir</span>
+                    </button>
+                    <button
+                      class="px-3 py-1.5 flex items-center gap-1.5 bg-red-500 bg-opacity-30 rounded-lg !rounded-button whitespace-nowrap text-xs"
+                    >
+                      <i class="ri-close-line"></i>
+                      <span>Randevuyu İptal Et</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Appointment Card 4 -->
+              <div class="appointment-card p-4 rounded-xl">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-sm text-gray-300"
+                      >30 Mayıs 2025, Cuma</span
+                    >
+                    <h3 class="text-lg font-medium">09:30 - 10:30</h3>
+                  </div>
+                  <div
+                    class="status-pending px-3 py-1 rounded-full text-xs font-medium text-yellow-400"
+                  >
+                    Beklemede
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 mb-4">
+                  <div
+                    class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+                  >
+                    <i class="ri-user-line"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-medium">Burak Öztürk</h4>
+                    <p class="text-sm text-gray-300">Beslenme Uzmanı</p>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <div>
+                    <span class="text-xs text-gray-300"
+                      >Görüşme Tipi: Yüz Yüze</span
+                    >
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      class="px-3 py-1.5 flex items-center gap-1.5 bg-gray-700 bg-opacity-30 rounded-lg !rounded-button whitespace-nowrap text-xs"
+                    >
+                      <i class="ri-calendar-line"></i>
+                      <span>Tarih Değiştir</span>
+                    </button>
+                    <button
+                      class="px-3 py-1.5 flex items-center gap-1.5 bg-red-500 bg-opacity-30 rounded-lg !rounded-button whitespace-nowrap text-xs"
+                    >
+                      <i class="ri-close-line"></i>
+                      <span>Randevuyu İptal Et</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Appointment List - Past Tab (Hidden by default) -->
+          <div id="past-appointments" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Past Appointment Card 1 -->
+              <div class="appointment-card p-4 rounded-xl">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-sm text-gray-300"
+                      >15 Mayıs 2025, Perşembe</span
+                    >
+                    <h3 class="text-lg font-medium">11:00 - 12:00</h3>
+                  </div>
+                  <div
+                    class="status-completed px-3 py-1 rounded-full text-xs font-medium text-gray-400"
+                  >
+                    Tamamlandı
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 mb-4">
+                  <div
+                    class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+                  >
+                    <i class="ri-user-line"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-medium">Dr. Ayşe Yılmaz</h4>
+                    <p class="text-sm text-gray-300">Klinik Psikolog</p>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <div>
+                    <span class="text-xs text-gray-300"
+                      >Görüşme Tipi: Online</span
+                    >
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      class="px-3 py-1.5 bg-primary bg-opacity-20 rounded-lg text-xs font-medium !rounded-button whitespace-nowrap"
+                    >
+                      Yeniden Randevu Al
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Past Appointment Card 2 -->
+              <div class="appointment-card p-4 rounded-xl">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-sm text-gray-300"
+                      >10 Mayıs 2025, Cumartesi</span
+                    >
+                    <h3 class="text-lg font-medium">15:30 - 16:30</h3>
+                  </div>
+                  <div
+                    class="status-completed px-3 py-1 rounded-full text-xs font-medium text-gray-400"
+                  >
+                    Tamamlandı
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 mb-4">
+                  <div
+                    class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+                  >
+                    <i class="ri-user-line"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-medium">Mehmet Kaya</h4>
+                    <p class="text-sm text-gray-300">Diyetisyen</p>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <div>
+                    <span class="text-xs text-gray-300"
+                      >Görüşme Tipi: Yüz Yüze</span
+                    >
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      class="px-3 py-1.5 bg-primary bg-opacity-20 rounded-lg text-xs font-medium !rounded-button whitespace-nowrap"
+                    >
+                      Yeniden Randevu Al
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Past Appointment Card 3 -->
+              <div class="appointment-card p-4 rounded-xl">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-sm text-gray-300"
+                      >5 Mayıs 2025, Pazartesi</span
+                    >
+                    <h3 class="text-lg font-medium">13:00 - 14:00</h3>
+                  </div>
+                  <div
+                    class="status-completed px-3 py-1 rounded-full text-xs font-medium text-gray-400"
+                  >
+                    Tamamlandı
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 mb-4">
+                  <div
+                    class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+                  >
+                    <i class="ri-user-line"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-medium">Dr. Zeynep Demir</h4>
+                    <p class="text-sm text-gray-300">Fizyoterapist</p>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <div>
+                    <span class="text-xs text-gray-300"
+                      >Görüşme Tipi: Online</span
+                    >
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      class="px-3 py-1.5 bg-primary bg-opacity-20 rounded-lg text-xs font-medium !rounded-button whitespace-nowrap"
+                    >
+                      Yeniden Randevu Al
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Empty State (Hidden by default) -->
+          <div id="empty-state" class="hidden text-center py-12">
+            <div
+              class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+            >
+              <i class="ri-calendar-line ri-2x"></i>
+            </div>
+            <h3 class="text-xl font-medium mb-2">
+              Henüz Randevunuz Bulunmuyor
+            </h3>
+            <p class="text-gray-300 mb-6 max-w-md mx-auto">
+              Uzmanlarımızla görüşmek için hemen randevu oluşturabilirsiniz.
+            </p>
+            <a
+              href="#"
+              data-readdy="true"
+              class="inline-block px-6 py-3 bg-primary rounded-lg font-medium !rounded-button whitespace-nowrap"
+            >
+              Randevu Oluştur
+            </a>
+          </div>
+          <!-- Date Change Modal -->
+          <div
+            id="date-change-modal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+          >
+            <div class="bg-gray-800 rounded-xl p-6 max-w-4xl w-full mx-4">
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-medium">Randevu Tarihini Değiştir</h3>
+                <button
+                  id="close-date-modal"
+                  class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-700"
+                >
+                  <i class="ri-close-line"></i>
+                </button>
+              </div>
+              <div class="mb-4">
+                <h4 class="text-sm text-gray-300 mb-2">Mevcut Randevu</h4>
+                <p class="font-medium" id="current-appointment-date"></p>
+              </div>
+              <div class="flex gap-6">
+                <div class="w-1/2">
+                  <h4 class="text-sm text-gray-300 mb-4">Uygun Saatler</h4>
+                  <div
+                    class="grid grid-cols-2 gap-2 max-h-[360px] overflow-y-auto pr-2"
+                  >
+                    <button
+                      class="time-slot py-3 px-4 bg-gray-700 bg-opacity-30 rounded-lg text-sm font-medium hover:bg-primary hover:bg-opacity-20 transition-colors !rounded-button whitespace-nowrap"
+                      data-time="09:00"
+                    >
+                      09:00 - 10:00
+                    </button>
+                    <button
+                      class="time-slot py-3 px-4 bg-gray-700 bg-opacity-30 rounded-lg text-sm font-medium hover:bg-primary hover:bg-opacity-20 transition-colors !rounded-button whitespace-nowrap"
+                      data-time="10:00"
+                    >
+                      10:00 - 11:00
+                    </button>
+                    <button
+                      class="time-slot py-3 px-4 bg-gray-700 bg-opacity-30 rounded-lg text-sm font-medium hover:bg-primary hover:bg-opacity-20 transition-colors !rounded-button whitespace-nowrap"
+                      data-time="11:00"
+                    >
+                      11:00 - 12:00
+                    </button>
+                    <button
+                      class="time-slot py-3 px-4 bg-gray-700 bg-opacity-30 rounded-lg text-sm font-medium hover:bg-primary hover:bg-opacity-20 transition-colors !rounded-button whitespace-nowrap"
+                      data-time="13:00"
+                    >
+                      13:00 - 14:00
+                    </button>
+                    <button
+                      class="time-slot py-3 px-4 bg-gray-700 bg-opacity-30 rounded-lg text-sm font-medium hover:bg-primary hover:bg-opacity-20 transition-colors !rounded-button whitespace-nowrap"
+                      data-time="14:00"
+                    >
+                      14:00 - 15:00
+                    </button>
+                    <button
+                      class="time-slot py-3 px-4 bg-gray-700 bg-opacity-30 rounded-lg text-sm font-medium hover:bg-primary hover:bg-opacity-20 transition-colors !rounded-button whitespace-nowrap"
+                      data-time="15:00"
+                    >
+                      15:00 - 16:00
+                    </button>
+                    <button
+                      class="time-slot py-3 px-4 bg-gray-700 bg-opacity-30 rounded-lg text-sm font-medium hover:bg-primary hover:bg-opacity-20 transition-colors !rounded-button whitespace-nowrap"
+                      data-time="16:00"
+                    >
+                      16:00 - 17:00
+                    </button>
+                  </div>
+                </div>
+                <div class="w-1/2">
+                  <h4 class="text-sm text-gray-300 mb-4">Takvim</h4>
+                  <div
+                    id="calendar"
+                    class="bg-gray-700 bg-opacity-30 rounded-lg p-4"
+                  >
+                    <div class="flex justify-between items-center mb-4">
+                      <button
+                        id="prevMonth"
+                        class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-600"
+                      >
+                        <i class="ri-arrow-left-s-line"></i>
+                      </button>
+                      <h5 class="text-sm font-medium" id="currentMonth"></h5>
+                      <button
+                        id="nextMonth"
+                        class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-600"
+                      >
+                        <i class="ri-arrow-right-s-line"></i>
+                      </button>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 text-center mb-2">
+                      <div class="text-xs text-gray-400">Pzt</div>
+                      <div class="text-xs text-gray-400">Sal</div>
+                      <div class="text-xs text-gray-400">Çar</div>
+                      <div class="text-xs text-gray-400">Per</div>
+                      <div class="text-xs text-gray-400">Cum</div>
+                      <div class="text-xs text-gray-400">Cmt</div>
+                      <div class="text-xs text-gray-400">Paz</div>
+                    </div>
+                    <div id="calendarDays" class="grid grid-cols-7 gap-1"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-3 mt-6">
+                <button
+                  id="cancel-date-change"
+                  class="flex-1 py-2.5 bg-gray-700 rounded-lg font-medium !rounded-button whitespace-nowrap"
+                >
+                  İptal
+                </button>
+                <button
+                  id="confirm-date-change"
+                  class="flex-1 py-2.5 bg-primary bg-opacity-50 rounded-lg font-medium !rounded-button whitespace-nowrap opacity-50 cursor-not-allowed"
+                  disabled
+                >
+                  Tarihi Güncelle
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Appointment Info Modal (Hidden by default) -->
+          <div
+            id="appointment-info-modal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+          >
+            <div class="bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-medium">Randevu Bilgileri</h3>
+                <button
+                  id="close-modal"
+                  class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-700"
+                >
+                  <i class="ri-close-line"></i>
+                </button>
+              </div>
+              <div class="mb-6">
+                <div class="mb-4">
+                  <h4 class="text-sm text-gray-300 mb-1">Randevu Tarihi</h4>
+                  <p class="font-medium">23 Mayıs 2025, Cuma 14:30 - 15:30</p>
+                </div>
+                <div class="mb-4">
+                  <h4 class="text-sm text-gray-300 mb-1">Uzman</h4>
+                  <p class="font-medium">Dr. Ayşe Yılmaz (Klinik Psikolog)</p>
+                </div>
+                <div class="mb-4">
+                  <h4 class="text-sm text-gray-300 mb-1">Görüşme Tipi</h4>
+                  <p class="font-medium">Online</p>
+                </div>
+                <div class="mb-4">
+                  <h4 class="text-sm text-gray-300 mb-1">Durum</h4>
+                  <div
+                    class="status-confirmed inline-block px-3 py-1 rounded-full text-xs font-medium text-green-400"
+                  >
+                    Onaylandı
+                  </div>
+                </div>
+                <div>
+                  <h4 class="text-sm text-gray-300 mb-1">Notlar</h4>
+                  <p class="text-sm">
+                    İlk görüşme. Lütfen görüşmeden 5 dakika önce hazır olunuz.
+                  </p>
+                </div>
+              </div>
+              <div class="flex gap-3">
+                <button
+                  class="flex-1 py-2.5 bg-gray-700 rounded-lg font-medium !rounded-button whitespace-nowrap"
+                >
+                  Düzenle
+                </button>
+                <button
+                  class="flex-1 py-2.5 bg-red-500 bg-opacity-30 rounded-lg font-medium !rounded-button whitespace-nowrap"
+                >
+                  İptal Et
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Cancel Confirmation Modal (Hidden by default) -->
+          <div
+            id="cancel-modal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+          >
+            <div class="bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+              <div
+                class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-red-500 bg-opacity-20 rounded-full"
+              >
+                <i class="ri-error-warning-line ri-2x text-red-400"></i>
+              </div>
+              <h3 class="text-lg font-medium text-center mb-2">
+                Randevuyu İptal Et
+              </h3>
+              <p class="text-gray-300 text-center mb-6">
+                Bu randevuyu iptal etmek istediğinizden emin misiniz? Bu işlem
+                geri alınamaz.
+              </p>
+              <div class="flex gap-3">
+                <button
+                  id="cancel-no"
+                  class="flex-1 py-2.5 bg-gray-700 rounded-lg font-medium !rounded-button whitespace-nowrap"
+                >
+                  Vazgeç
+                </button>
+                <button
+                  id="cancel-yes"
+                  class="flex-1 py-2.5 bg-red-500 rounded-lg font-medium !rounded-button whitespace-nowrap"
+                >
+                  İptal Et
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script id="tabSwitcher">
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabButtons = document.querySelectorAll(".tab-button");
+        const tabContents = document.querySelectorAll(".tab-content");
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const tabName = this.getAttribute("data-tab");
+            // Update active tab button
+            tabButtons.forEach((btn) => btn.classList.remove("active"));
+            this.classList.add("active");
+            // Show corresponding tab content
+            tabContents.forEach((content) => {
+              content.classList.add("hidden");
+            });
+            document
+              .getElementById(tabName + "-appointments")
+              .classList.remove("hidden");
+          });
+        });
+      });
+    </script>
+    <script id="mobileMenuToggle">
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const sidebarMenu = document.getElementById("sidebarMenu");
+        mobileMenuBtn.addEventListener("click", function () {
+          sidebarMenu.classList.toggle("hidden");
+        });
+        window.addEventListener("resize", function () {
+          if (window.innerWidth >= 1024) {
+            sidebarMenu.classList.remove("hidden");
+          }
+        });
+      });
+    </script>
+    <script id="appointmentCardInteraction">
+      document.addEventListener("DOMContentLoaded", function () {
+        const appointmentCards = document.querySelectorAll(".appointment-card");
+        const infoModal = document.getElementById("appointment-info-modal");
+        const cancelModal = document.getElementById("cancel-modal");
+        const dateChangeModal = document.getElementById("date-change-modal");
+        const closeModalBtn = document.getElementById("close-modal");
+        const closeDateModalBtn = document.getElementById("close-date-modal");
+        const cancelNoBtn = document.getElementById("cancel-no");
+        const cancelYesBtn = document.getElementById("cancel-yes");
+        const cancelDateChangeBtn = document.getElementById("cancel-date-change");
+        const confirmDateChangeBtn = document.getElementById("confirm-date-change");
+        const currentAppointmentDate = document.getElementById(
+          "current-appointment-date",
+        );
+        const cancelButtons = document.querySelectorAll(
+          ".appointment-card button:nth-child(2)",
+        );
+        const dateChangeButtons = document.querySelectorAll(
+          ".appointment-card button:nth-child(1)",
+        );
+        const timeSlots = document.querySelectorAll(".time-slot");
+        const prevMonthBtn = document.getElementById("prevMonth");
+        const nextMonthBtn = document.getElementById("nextMonth");
+        const currentMonthElement = document.getElementById("currentMonth");
+        const calendarDays = document.getElementById("calendarDays");
+        let selectedDate = null;
+        let selectedTime = null;
+        let currentDate = new Date();
+        const months = [
+          "Ocak",
+          "Şubat",
+          "Mart",
+          "Nisan",
+          "Mayıs",
+          "Haziran",
+          "Temmuz",
+          "Ağustos",
+          "Eylül",
+          "Ekim",
+          "Kasım",
+          "Aralık",
+        ];
+        function updateCalendar() {
+          const firstDay = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            1,
+          );
+          const lastDay = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() + 1,
+            0,
+          );
+          currentMonthElement.textContent = `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+          let dayOfWeek = firstDay.getDay() || 7;
+          dayOfWeek = dayOfWeek === 1 ? 0 : dayOfWeek - 1;
+          calendarDays.innerHTML = "";
+          for (let i = 0; i < dayOfWeek; i++) {
+            const emptyDay = document.createElement("div");
+            emptyDay.className = "h-9";
+            calendarDays.appendChild(emptyDay);
+          }
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          for (let day = 1; day <= lastDay.getDate(); day++) {
+            const dateButton = document.createElement("button");
+            const currentDay = new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth(),
+              day,
+            );
+            const isToday = currentDay.getTime() === today.getTime();
+            const isPast = currentDay < today;
+            dateButton.className = `h-9 flex items-center justify-center rounded-lg text-sm transition-colors ${
+              isToday
+                ? "bg-primary bg-opacity-20 font-medium"
+                : isPast
+                  ? "text-gray-500 cursor-not-allowed"
+                  : "hover:bg-gray-600"
+            } ${selectedDate && currentDay.getTime() === selectedDate.getTime() ? "bg-primary text-white" : ""}`;
+            dateButton.textContent = day;
+            if (!isPast) {
+              dateButton.addEventListener("click", () => {
+                const prevSelected = calendarDays.querySelector(
+                  ".bg-primary.text-white",
+                );
+                if (prevSelected) {
+                  prevSelected.classList.remove("bg-primary", "text-white");
+                  prevSelected.classList.add("hover:bg-gray-600");
+                }
+                dateButton.classList.remove("hover:bg-gray-600");
+                dateButton.classList.add("bg-primary", "text-white");
+                selectedDate = currentDay;
+                checkSelection();
+              });
+            } else {
+              dateButton.disabled = true;
+            }
+            calendarDays.appendChild(dateButton);
+          }
+        }
+        function checkSelection() {
+          const isValid = selectedDate && selectedTime;
+          confirmDateChangeBtn.disabled = !isValid;
+          confirmDateChangeBtn.classList.toggle("opacity-50", !isValid);
+          confirmDateChangeBtn.classList.toggle("cursor-not-allowed", !isValid);
+          confirmDateChangeBtn.classList.toggle("bg-opacity-50", !isValid);
+        }
+        prevMonthBtn.addEventListener("click", () => {
+          const today = new Date();
+          const newDate = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() - 1,
+          );
+          if (
+            newDate.getMonth() >= today.getMonth() ||
+            newDate.getFullYear() > today.getFullYear()
+          ) {
+            currentDate = newDate;
+            updateCalendar();
+          }
+        });
+        nextMonthBtn.addEventListener("click", () => {
+          currentDate = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() + 1,
+          );
+          updateCalendar();
+        });
+        timeSlots.forEach((slot) => {
+          slot.addEventListener("click", () => {
+            timeSlots.forEach((s) => {
+              s.classList.remove("bg-primary", "text-white");
+              s.classList.add("bg-gray-700", "bg-opacity-30");
+            });
+            slot.classList.remove("bg-gray-700", "bg-opacity-30");
+            slot.classList.add("bg-primary", "text-white");
+            selectedTime = slot.dataset.time;
+            checkSelection();
+          });
+        });
+        dateChangeButtons.forEach((button) => {
+          button.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const card = this.closest(".appointment-card");
+            const dateText = card.querySelector(
+              "span.text-sm.text-gray-300",
+            ).textContent;
+            const timeText = card.querySelector("h3.text-lg").textContent;
+            currentAppointmentDate.textContent = `${dateText} ${timeText}`;
+            selectedDate = null;
+            selectedTime = null;
+            timeSlots.forEach((slot) => {
+              slot.classList.remove("bg-primary", "text-white");
+              slot.classList.add("bg-gray-700", "bg-opacity-30");
+            });
+            updateCalendar();
+            checkSelection();
+            dateChangeModal.classList.remove("hidden");
+          });
+        });
+        closeDateModalBtn.addEventListener("click", () => {
+          dateChangeModal.classList.add("hidden");
+          selectedDate = null;
+          selectedTime = null;
+        });
+        cancelDateChangeBtn.addEventListener("click", () => {
+          dateChangeModal.classList.add("hidden");
+          selectedDate = null;
+          selectedTime = null;
+        });
+        confirmDateChangeBtn.addEventListener("click", function () {
+          if (selectedDate && selectedTime) {
+            dateChangeModal.classList.add("hidden");
+            selectedDate = null;
+            selectedTime = null;
+          }
+        });
+        updateCalendar();
+        // Show appointment details on card click
+        appointmentCards.forEach((card) => {
+          card.addEventListener("click", function (e) {
+            if (!e.target.closest("button")) {
+              infoModal.classList.remove("hidden");
+            }
+          });
+        });
+        // Close info modal
+        closeModalBtn.addEventListener("click", function () {
+          infoModal.classList.add("hidden");
+        });
+        // Show cancel confirmation modal
+        cancelButtons.forEach((button) => {
+          button.addEventListener("click", function (e) {
+            e.stopPropagation();
+            cancelModal.classList.remove("hidden");
+          });
+        });
+        // Cancel modal buttons
+        cancelNoBtn.addEventListener("click", function () {
+          cancelModal.classList.add("hidden");
+        });
+        cancelYesBtn.addEventListener("click", function () {
+          cancelModal.classList.add("hidden");
+          // Here you would add code to actually cancel the appointment
+        });
+        // Close modals when clicking outside
+        window.addEventListener("click", function (e) {
+          if (e.target === infoModal) {
+            infoModal.classList.add("hidden");
+          }
+          if (e.target === cancelModal) {
+            cancelModal.classList.add("hidden");
+          }
+          if (e.target === dateChangeModal) {
+            dateChangeModal.classList.add("hidden");
+          }
+        });
+      });
+    </script>
+    <script id="filterInteraction">
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".search-input");
+        const statusSelect = document.querySelector("select:nth-of-type(1)");
+        const expertSelect = document.querySelector("select:nth-of-type(2)");
+        const dateInput = document.querySelector(".date-input");
+        // Simple filter functionality (for demonstration)
+        function applyFilters() {
+          const searchTerm = searchInput.value.toLowerCase();
+          const statusFilter = statusSelect.value;
+          const expertFilter = expertSelect.value;
+          const dateFilter = dateInput.value;
+          // Get all appointment cards in the active tab
+          const activeTab = document.querySelector(".tab-content:not(.hidden)");
+          const cards = activeTab.querySelectorAll(".appointment-card");
+          cards.forEach((card) => {
+            let shouldShow = true;
+            // Search term filter
+            if (searchTerm) {
+              const cardText = card.textContent.toLowerCase();
+              if (!cardText.includes(searchTerm)) {
+                shouldShow = false;
+              }
+            }
+            // Status filter
+            if (statusFilter && statusFilter !== "") {
+              const cardStatus = card.querySelector(
+                'div[class^="status-"]',
+              ).className;
+              if (!cardStatus.includes(statusFilter)) {
+                shouldShow = false;
+              }
+            }
+            // Expert filter (simplified)
+            if (expertFilter && expertFilter !== "all" && expertFilter !== "") {
+              const expertText = card
+                .querySelector("p.text-sm.text-gray-300")
+                .textContent.toLowerCase();
+              if (!expertText.includes(expertFilter)) {
+                shouldShow = false;
+              }
+            }
+            // Date filter (simplified)
+            if (dateFilter) {
+              const dateText = card.querySelector(
+                "span.text-sm.text-gray-300",
+              ).textContent;
+              // This is a simplified check - in a real app you'd parse and compare dates properly
+              if (!dateText.includes(dateFilter)) {
+                shouldShow = false;
+              }
+            }
+            // Show or hide the card
+            card.style.display = shouldShow ? "block" : "none";
+          });
+          // Show empty state if no cards are visible
+          const visibleCards = activeTab.querySelectorAll(
+            '.appointment-card[style="display: block"]',
+          );
+          const emptyState = document.getElementById("empty-state");
+          if (visibleCards.length === 0) {
+            emptyState.classList.remove("hidden");
+          } else {
+            emptyState.classList.add("hidden");
+          }
+        }
+        // Add event listeners to filter controls
+        searchInput.addEventListener("input", applyFilters);
+        statusSelect.addEventListener("change", applyFilters);
+        expertSelect.addEventListener("change", applyFilters);
+        dateInput.addEventListener("change", applyFilters);
+      });
+    </script>
+  </body>
+</html>

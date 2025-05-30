@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evital Süreçleri - Sağlık Asistanınız</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#9333ea",
+              secondary: "#6b21a8",
+            },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+      background: url('static/image.png') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      }
+      .module-card {
+      background-color: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      @media (min-width: 1024px) {
+      .module-card:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(5px);
+      }
+      }
+      @media (max-width: 1024px) {
+      .module-card:hover {
+      transform: translateY(-3px);
+      }
+      }
+      .process-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      }
+      .process-card:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-3px);
+      }
+      .faq-item {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      }
+      .faq-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      }
+      .chat-container {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      min-height: 300px;
+      }
+      .message-input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .tag-item {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.2s ease;
+      }
+      .tag-item:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      }
+      .support-form {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    </style>
+  </head>
+  <body class="text-white">
+    <div class="container mx-auto px-4 py-8 min-h-screen">
+      <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Mobile Header -->
+        <div class="lg:hidden flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <a
+              href="AnaSayfa.html"
+              data-readdy="true"
+              class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+            >
+              <i class="ri-arrow-left-line ri-lg"></i>
+            </a>
+            <!-- <h1 class="text-xl font-medium">Evital</h1> -->
+          </div>
+          <button
+            id="mobileMenuBtn"
+            class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+          >
+            <i class="ri-menu-line ri-lg"></i>
+          </button>
+        </div>
+        <!-- Left Sidebar with Modules -->
+        <div
+          id="sidebarMenu"
+          class="w-full lg:w-80 lg:flex-shrink-0 hidden lg:block"
+        >
+          <div class="lg:sticky lg:top-8">
+            <!-- Logo Area -->
+            <div class="flex items-center gap-3 mb-8">
+              <div
+                class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+              >
+                <i class="ri-health-book-line ri-lg"></i>
+              </div>
+              <h1 class="text-xl font-medium">Evital</h1>
+            </div>
+            <!-- Module List -->
+            <div class="space-y-3 mb-6 lg:mb-0">
+              <a
+                href="Randevu-İşlemleri-Sayfası.html"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-check-line"></i>
+                  </div>
+                  <h3 class="font-medium">Randevu İşlemleri</h3>
+                </div>
+              </a>
+              <a
+                href="Randevu-Oluşturma-Sayfası.html"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-todo-line"></i>
+                  </div>
+                  <h3 class="font-medium">Randevu Oluşturma</h3>
+                </div>
+              </a>
+              <a
+                href="#"
+                data-readdy="true"
+                class="module-card p-4 rounded-xl cursor-pointer flex items-center gap-3"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-30 rounded-full"
+                  >
+                    <i class="ri-calendar-todo-line"></i>
+                  </div>
+                  <h3 class="font-medium">Evital Süreçleri</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Main Content Area -->
+        <div class="flex-grow">
+          <!-- Page Header -->
+          <header class="flex justify-between items-center mb-8">
+          <div class="flex items-center justify-between mb-6">
+            <a
+              href="AnaSayfa.html"
+              data-readdy="true"
+              class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+            >
+              <i class="ri-arrow-left-line ri-lg"></i>
+            </a>
+          <div class="flex items-center gap-3 pl-10"><h2 class="text-xl font-medium ">Evital Süreçleri</h2></div>
+            <div class="w-10 h-10"></div>
+          </div>
+            <div class="flex gap-2">
+              <button
+                class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+              >
+                <i class="ri-question-line ri-lg"></i>
+              </button>
+              <button
+                class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-20 rounded-full"
+              >
+                <i class="ri-more-2-line ri-lg"></i>
+              </button>
+            </div>
+          </header>
+          <!-- AI Soru-Cevap Alanı -->
+          <div class="chat-container rounded-2xl p-6 mb-10">
+            <h3 class="text-xl font-medium mb-4">Evital Hakkında Sorun</h3>
+            <p class="text-gray-300 mb-6">
+              Evital hakkında merak ettiğiniz her şeyi sorabilirsiniz. Yapay
+              zeka asistanımız size hemen yanıt verecektir.
+            </p>
+            <div class="relative mb-6">
+              <input
+                type="text"
+                id="aiQuestion"
+                class="message-input w-full py-4 px-5 pr-20 rounded-xl text-white placeholder-gray-300 outline-none"
+                placeholder="Evital hakkında merak ettiğiniz her şeyi sorabilirsiniz"
+              />
+              <div
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 flex gap-2"
+              >
+                <button
+                  class="w-9 h-9 flex items-center justify-center text-white rounded-full bg-gray-700 bg-opacity-50"
+                >
+                  <i class="ri-mic-line"></i>
+                </button>
+                <button
+                  id="askButton"
+                  class="w-9 h-9 flex items-center justify-center text-white rounded-full bg-primary whitespace-nowrap !rounded-button"
+                >
+                  <i class="ri-send-plane-fill"></i>
+                </button>
+              </div>
+            </div>
+            <div id="aiResponseArea" class="hidden">
+              <div class="bg-white bg-opacity-5 rounded-xl p-5 mb-4">
+                <div class="flex items-start gap-3">
+                  <div
+                    class="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-primary bg-opacity-20 rounded-full mt-1"
+                  >
+                    <i class="ri-robot-line"></i>
+                  </div>
+                  <div>
+                    <p class="text-white mb-2">
+                      Evital, sağlık hizmetlerine erişimi kolaylaştıran dijital
+                      bir platformdur. Uzman doktorlar ve sağlık
+                      profesyonelleriyle görüntülü görüşme yapabilir, randevu
+                      alabilir ve sağlık sorularınıza yanıt bulabilirsiniz.
+                    </p>
+                    <p class="text-white">
+                      Daha spesifik bilgiler için lütfen sorularınızı
+                      detaylandırın.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Popüler Sorular -->
+          <div class="mb-10">
+            <h3 class="text-xl font-medium mb-4">Popüler Sorular</h3>
+            <div class="flex flex-wrap gap-3">
+              <button class="tag-item px-4 py-2 rounded-full !rounded-button">
+                Randevu nasıl alınır?
+              </button>
+              <button class="tag-item px-4 py-2 rounded-full !rounded-button">
+                Ödeme yöntemleri nelerdir?
+              </button>
+              <button class="tag-item px-4 py-2 rounded-full !rounded-button">
+                Görüşme süresi ne kadar?
+              </button>
+              <button class="tag-item px-4 py-2 rounded-full !rounded-button">
+                İptal politikası nedir?
+              </button>
+              <button class="tag-item px-4 py-2 rounded-full !rounded-button">
+                Uzmanlar nasıl seçiliyor?
+              </button>
+              <button class="tag-item px-4 py-2 rounded-full !rounded-button">
+                Evital'de hangi hizmetler var?
+              </button>
+            </div>
+          </div>
+          <!-- Evital Süreçleri Adımları -->
+          <div class="mb-10">
+            <h3 class="text-xl font-medium mb-6">
+              Evital'de Hizmet Alma Adımları
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="process-card p-5 rounded-xl">
+                <div class="flex items-center gap-4 mb-4">
+                  <div
+                    class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-20 rounded-full text-xl font-bold"
+                  >
+                    1
+                  </div>
+                  <h4 class="text-lg font-medium">Hesap Oluşturma</h4>
+                </div>
+                <p class="text-gray-300">
+                  Evital'e üye olarak kişisel sağlık profilinizi oluşturun.
+                  E-posta veya telefon numaranızla hızlıca kayıt olabilirsiniz.
+                </p>
+              </div>
+              <div class="process-card p-5 rounded-xl">
+                <div class="flex items-center gap-4 mb-4">
+                  <div
+                    class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-20 rounded-full text-xl font-bold"
+                  >
+                    2
+                  </div>
+                  <h4 class="text-lg font-medium">Uzman Seçimi</h4>
+                </div>
+                <p class="text-gray-300">
+                  İhtiyacınıza uygun uzmanı filtreleme seçenekleriyle bulun.
+                  Uzmanlık alanı, deneyim ve hasta yorumlarına göre seçim
+                  yapabilirsiniz.
+                </p>
+              </div>
+              <div class="process-card p-5 rounded-xl">
+                <div class="flex items-center gap-4 mb-4">
+                  <div
+                    class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-20 rounded-full text-xl font-bold"
+                  >
+                    3
+                  </div>
+                  <h4 class="text-lg font-medium">Randevu Oluşturma</h4>
+                </div>
+                <p class="text-gray-300">
+                  Size uygun tarih ve saati seçerek randevunuzu oluşturun.
+                  İsterseniz ücretsiz ön görüşme talebinde bulunabilirsiniz.
+                </p>
+              </div>
+              <div class="process-card p-5 rounded-xl">
+                <div class="flex items-center gap-4 mb-4">
+                  <div
+                    class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-20 rounded-full text-xl font-bold"
+                  >
+                    4
+                  </div>
+                  <h4 class="text-lg font-medium">Ödeme İşlemi</h4>
+                </div>
+                <p class="text-gray-300">
+                  Güvenli ödeme sistemimizle kredi kartı, banka kartı veya
+                  havale yöntemlerinden birini seçerek ödemenizi yapın.
+                </p>
+              </div>
+              <div class="process-card p-5 rounded-xl">
+                <div class="flex items-center gap-4 mb-4">
+                  <div
+                    class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-20 rounded-full text-xl font-bold"
+                  >
+                    5
+                  </div>
+                  <h4 class="text-lg font-medium">Görüşme</h4>
+                </div>
+                <p class="text-gray-300">
+                  Randevu saatinde Evital platformuna giriş yaparak görüntülü
+                  görüşmenizi gerçekleştirin. Görüşme süresi seçtiğiniz pakete
+                  göre değişir.
+                </p>
+              </div>
+              <div class="process-card p-5 rounded-xl">
+                <div class="flex items-center gap-4 mb-4">
+                  <div
+                    class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-20 rounded-full text-xl font-bold"
+                  >
+                    6
+                  </div>
+                  <h4 class="text-lg font-medium">Takip ve Değerlendirme</h4>
+                </div>
+                <p class="text-gray-300">
+                  Görüşme sonrası uzmanınızın önerilerini takip edin ve
+                  değerlendirme yapın. İhtiyaç duyarsanız takip randevusu
+                  oluşturabilirsiniz.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Sık Sorulan Sorular -->
+          <div class="mb-10">
+            <h3 class="text-xl font-medium mb-6">Sık Sorulan Sorular</h3>
+            <div class="space-y-4">
+              <div class="faq-item rounded-xl overflow-hidden">
+                <button
+                  class="faq-toggle w-full p-5 text-left flex justify-between items-center"
+                >
+                  <span class="font-medium"
+                    >Evital'de görüşme ücretleri nasıl belirlenir?</span
+                  >
+                  <i class="ri-arrow-down-s-line transition-transform"></i>
+                </button>
+                <div class="faq-content hidden p-5 pt-0 text-gray-300">
+                  <p>
+                    Evital'de görüşme ücretleri, uzmanların uzmanlık alanı,
+                    deneyim süresi ve görüşme süresine göre değişiklik gösterir.
+                    Her uzmanın profil sayfasında ücret bilgisi şeffaf bir
+                    şekilde belirtilmiştir. Ayrıca bazı uzmanlarımız ilk görüşme
+                    için ücretsiz ön değerlendirme sunmaktadır.
+                  </p>
+                </div>
+              </div>
+              <div class="faq-item rounded-xl overflow-hidden">
+                <button
+                  class="faq-toggle w-full p-5 text-left flex justify-between items-center"
+                >
+                  <span class="font-medium"
+                    >Randevumu nasıl iptal edebilirim?</span
+                  >
+                  <i class="ri-arrow-down-s-line transition-transform"></i>
+                </button>
+                <div class="faq-content hidden p-5 pt-0 text-gray-300">
+                  <p>
+                    Randevunuzu, görüşme saatinden en az 24 saat önce "Randevu
+                    İşlemleri" bölümünden iptal edebilirsiniz. 24 saatten az bir
+                    süre kala yapılan iptallerde, ödemenizin %50'si iade edilir.
+                    Acil durumlarda destek ekibimizle iletişime geçebilirsiniz.
+                  </p>
+                </div>
+              </div>
+              <div class="faq-item rounded-xl overflow-hidden">
+                <button
+                  class="faq-toggle w-full p-5 text-left flex justify-between items-center"
+                >
+                  <span class="font-medium"
+                    >Görüşme için teknik gereksinimler nelerdir?</span
+                  >
+                  <i class="ri-arrow-down-s-line transition-transform"></i>
+                </button>
+                <div class="faq-content hidden p-5 pt-0 text-gray-300">
+                  <p>
+                    Görüşme için stabil bir internet bağlantısı, kamera ve
+                    mikrofona sahip bir cihaz (bilgisayar, tablet veya akıllı
+                    telefon) yeterlidir. Tarayıcı olarak Chrome, Firefox veya
+                    Safari'nin güncel sürümlerini kullanmanızı öneririz. Görüşme
+                    öncesi sistem testi yapabilirsiniz.
+                  </p>
+                </div>
+              </div>
+              <div class="faq-item rounded-xl overflow-hidden">
+                <button
+                  class="faq-toggle w-full p-5 text-left flex justify-between items-center"
+                >
+                  <span class="font-medium"
+                    >Evital'de kişisel verilerim güvende mi?</span
+                  >
+                  <i class="ri-arrow-down-s-line transition-transform"></i>
+                </button>
+                <div class="faq-content hidden p-5 pt-0 text-gray-300">
+                  <p>
+                    Evital, KVKK ve uluslararası veri güvenliği standartlarına
+                    uygun olarak hizmet vermektedir. Tüm görüşmeler uçtan uca
+                    şifrelenir ve kişisel sağlık verileriniz güvenli sunucularda
+                    saklanır. Verileriniz, sizin izniniz olmadan üçüncü
+                    taraflarla paylaşılmaz.
+                  </p>
+                </div>
+              </div>
+              <div class="faq-item rounded-xl overflow-hidden">
+                <button
+                  class="faq-toggle w-full p-5 text-left flex justify-between items-center"
+                >
+                  <span class="font-medium"
+                    >Evital'deki uzmanlar nasıl seçiliyor?</span
+                  >
+                  <i class="ri-arrow-down-s-line transition-transform"></i>
+                </button>
+                <div class="faq-content hidden p-5 pt-0 text-gray-300">
+                  <p>
+                    Evital'de hizmet veren tüm uzmanlar, alanlarında yetkin,
+                    gerekli sertifika ve diplomalara sahip profesyonellerdir.
+                    Her uzman, platformumuza katılmadan önce kapsamlı bir
+                    doğrulama sürecinden geçer. Uzmanlarımızın mesleki geçmişi,
+                    eğitim bilgileri ve lisansları titizlikle incelenir.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Destek Ekibine Ulaşım Formu -->
+          <div class="support-form rounded-2xl p-6 mb-10">
+            <h3 class="text-xl font-medium mb-4">Destek Ekibine Ulaşın</h3>
+            <p class="text-gray-300 mb-6">
+              Evital hakkında sormak istediğiniz bir şey mi var? Destek
+              ekibimize mesaj gönderin, en kısa sürede size dönüş yapacağız.
+            </p>
+            <form id="supportForm">
+              <div class="mb-4">
+                <label for="supportTopic" class="block mb-2 text-sm font-medium"
+                  >Konu</label
+                >
+                <select
+                  id="supportTopic"
+                  class="message-input w-full py-3 px-4 rounded-xl text-white bg-transparent border-none outline-none pr-8"
+                >
+                  <option value="" disabled selected>
+                    Lütfen bir konu seçin
+                  </option>
+                  <option value="technical">Teknik Sorun</option>
+                  <option value="payment">Ödeme Sorunu</option>
+                  <option value="appointment">Randevu Sorunu</option>
+                  <option value="expert">Uzmanlar Hakkında</option>
+                  <option value="other">Diğer</option>
+                </select>
+              </div>
+              <div class="mb-4">
+                <label
+                  for="supportMessage"
+                  class="block mb-2 text-sm font-medium"
+                  >Mesajınız</label
+                >
+                <textarea
+                  id="supportMessage"
+                  rows="4"
+                  class="message-input w-full py-3 px-4 rounded-xl text-white bg-transparent outline-none resize-none"
+                  placeholder="Sorun veya önerinizi detaylı bir şekilde yazın"
+                ></textarea>
+              </div>
+              <div class="mb-6">
+                <label class="block mb-2 text-sm font-medium"
+                  >Dosya Ekle (İsteğe Bağlı)</label
+                >
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    class="flex items-center gap-2 px-4 py-2 bg-white bg-opacity-10 rounded-xl whitespace-nowrap !rounded-button"
+                  >
+                    <i class="ri-attachment-2"></i>
+                    <span>Dosya Seç</span>
+                  </button>
+                  <span class="text-sm text-gray-300">Maksimum 5MB</span>
+                </div>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-primary py-3 rounded-xl font-medium hover:bg-opacity-90 transition whitespace-nowrap !rounded-button"
+              >
+                Gönder
+              </button>
+            </form>
+          </div>
+          <!-- Footer -->
+          <footer
+            class="text-center text-gray-400 text-sm py-6 border-t border-gray-700 border-opacity-30"
+          >
+            <div class="flex justify-center gap-6 mb-4">
+              <a href="#" class="hover:text-white transition"
+                >Gizlilik Politikası</a
+              >
+              <a href="#" class="hover:text-white transition"
+                >Kullanım Koşulları</a
+              >
+              <a href="#" class="hover:text-white transition">KVKK</a>
+            </div>
+            <p>© 2025 Evital. Tüm hakları saklıdır.</p>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <script id="faqInteraction">
+      document.addEventListener("DOMContentLoaded", function () {
+        const faqToggles = document.querySelectorAll(".faq-toggle");
+        faqToggles.forEach((toggle) => {
+          toggle.addEventListener("click", function () {
+            const content = this.nextElementSibling;
+            const arrow = this.querySelector("i");
+            if (content.classList.contains("hidden")) {
+              content.classList.remove("hidden");
+              arrow.style.transform = "rotate(180deg)";
+            } else {
+              content.classList.add("hidden");
+              arrow.style.transform = "rotate(0)";
+            }
+          });
+        });
+      });
+    </script>
+    <script id="aiQuestionInteraction">
+      document.addEventListener("DOMContentLoaded", function () {
+        const aiQuestion = document.getElementById("aiQuestion");
+        const askButton = document.getElementById("askButton");
+        const aiResponseArea = document.getElementById("aiResponseArea");
+        const tagButtons = document.querySelectorAll(".tag-item");
+        askButton.addEventListener("click", function () {
+          if (aiQuestion.value.trim() !== "") {
+            aiResponseArea.classList.remove("hidden");
+            aiQuestion.value = "";
+          }
+        });
+        aiQuestion.addEventListener("keypress", function (e) {
+          if (e.key === "Enter" && aiQuestion.value.trim() !== "") {
+            aiResponseArea.classList.remove("hidden");
+            aiQuestion.value = "";
+          }
+        });
+        tagButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            aiQuestion.value = this.textContent;
+            aiResponseArea.classList.remove("hidden");
+          });
+        });
+      });
+    </script>
+    <script id="supportFormInteraction">
+      document.addEventListener("DOMContentLoaded", function () {
+        const supportForm = document.getElementById("supportForm");
+        supportForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const topic = document.getElementById("supportTopic").value;
+          const message = document.getElementById("supportMessage").value;
+          if (topic && message.trim() !== "") {
+            alert(
+              "Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.",
+            );
+            supportForm.reset();
+          }
+        });
+      });
+    </script>
+    <script id="mobileMenuInteraction">
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const sidebarMenu = document.getElementById("sidebarMenu");
+        mobileMenuBtn.addEventListener("click", function () {
+          sidebarMenu.classList.toggle("hidden");
+        });
+        window.addEventListener("resize", function () {
+          if (window.innerWidth >= 1024) {
+            sidebarMenu.classList.remove("hidden");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

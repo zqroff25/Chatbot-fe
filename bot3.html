@@ -74,7 +74,7 @@
       <div class="w-60 bg-white border-r border-gray-200 flex flex-col h-full">
         <!-- New Chat Button -->
         <div class="p-4">
-          <button
+          <button  onclick="location.href='index.html'"
             class="flex items-center justify-center w-full gap-2 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap"
           >
             <div class="w-5 h-5 flex items-center justify-center">
@@ -99,7 +99,7 @@
               <div class="w-5 h-5 flex items-center justify-center">
                 <i class="ri-tools-line"></i>
               </div>
-              <span class="text-gray-700 font-medium">Gelişmiş Araçlar</span>
+              <span class="text-gray-700 font-medium">Hizmetler</span>
             </div>
             <div
               class="w-5 h-5 flex items-center justify-center transition-transform duration-200"
@@ -123,6 +123,126 @@
                   <div class="text-gray-700 text-sm">Randevu Yönetimi</div>
                   <div class="text-gray-500 text-xs">
                     Görüntüle, yeniden planla veya iptal et
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              id="appointmentDialog"
+              class="chat-message bg-white p-4 rounded-lg shadow-sm self-start max-w-md w-full mb-4 hidden"
+            >
+              <div class="bg-white rounded-lg w-full">
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="text-lg font-semibold text-gray-800">
+                    Randevularım
+                  </h3>
+                  <button
+                    id="closeAppointmentDialog"
+                    class="text-gray-400 hover:text-gray-600"
+                  >
+                    <div class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-close-line"></i>
+                    </div>
+                  </button>
+                </div>
+                <div class="space-y-3">
+                  <div class="border border-gray-200 rounded-lg p-3">
+                    <div class="flex justify-between items-start mb-2">
+                      <div>
+                        <h4 class="font-medium text-gray-800">
+                          Dr. Ayşe Yılmaz
+                        </h4>
+                        <p class="text-sm text-gray-500">Klinik Psikolog</p>
+                      </div>
+                      <span
+                        class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full"
+                        >Yaklaşan</span
+                      >
+                    </div>
+                    <div
+                      class="flex items-center gap-3 text-sm text-gray-600 mb-3"
+                    >
+                      <div class="flex items-center gap-1">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-calendar-line"></i>
+                        </div>
+                        <span>3 Haziran 2025</span>
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-time-line"></i>
+                        </div>
+                        <span>10:30</span>
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-timer-line"></i>
+                        </div>
+                        <span>50 dakika</span>
+                      </div>
+                    </div>
+                    <div class="flex gap-2">
+                      <button
+                        class="rescheduleAppointmentBtn bg-white border border-gray-200 text-gray-700 py-1.5 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                      >
+                        Yeniden Planla
+                      </button>
+                      <button
+                        class="cancelAppointmentBtn bg-white border border-red-200 text-red-600 py-1.5 px-3 rounded-button hover:bg-red-50 transition-colors whitespace-nowrap text-sm"
+                      >
+                        İptal Et
+                      </button>
+                    </div>
+                  </div>
+                  <div class="border border-gray-200 rounded-lg p-3">
+                    <div class="flex justify-between items-start mb-2">
+                      <div>
+                        <h4 class="font-medium text-gray-800">
+                          Dr. Mehmet Demir
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Bilişsel Davranışçı Terapist
+                        </p>
+                      </div>
+                      <span
+                        class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full"
+                        >Onaylandı</span
+                      >
+                    </div>
+                    <div
+                      class="flex items-center gap-3 text-sm text-gray-600 mb-3"
+                    >
+                      <div class="flex items-center gap-1">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-calendar-line"></i>
+                        </div>
+                        <span>10 Haziran 2025</span>
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-time-line"></i>
+                        </div>
+                        <span>14:00</span>
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-timer-line"></i>
+                        </div>
+                        <span>50 dakika</span>
+                      </div>
+                    </div>
+                    <div class="flex gap-2">
+                      <button
+                        class="rescheduleAppointmentBtn bg-white border border-gray-200 text-gray-700 py-1.5 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                      >
+                        Yeniden Planla
+                      </button>
+                      <button
+                        class="cancelAppointmentBtn bg-white border border-red-200 text-red-600 py-1.5 px-3 rounded-button hover:bg-red-50 transition-colors whitespace-nowrap text-sm"
+                      >
+                        İptal Et
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -162,7 +282,10 @@
                 </div>
               </div>
             </div>
-            <div class="px-3 py-2 hover:bg-gray-50 cursor-pointer">
+            <div
+              id="freeConsultationBtn"
+              class="px-3 py-2 hover:bg-gray-50 cursor-pointer"
+            >
               <div class="flex items-center gap-3">
                 <div
                   class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600"
@@ -175,6 +298,227 @@
                     15 dakikalık uzman görüşmesi
                   </div>
                 </div>
+              </div>
+            </div>
+            <div
+              id="freeConsultationDialog"
+              class="chat-message bg-white p-4 rounded-lg shadow-sm self-start max-w-md w-full mb-4 hidden"
+            >
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">
+                  Ücretsiz Danışma Randevusu
+                </h3>
+                <button
+                  id="closeFreeConsultationDialog"
+                  class="text-gray-400 hover:text-gray-600"
+                >
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-close-line"></i>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4"
+              >
+                <p class="text-sm text-blue-800">
+                  Uzmanlarımızla ücretsiz 15 dakikalık görüşme yaparak, size en
+                  uygun tedavi planını belirleyebilirsiniz. Bu görüşmede:
+                </p>
+                <ul class="mt-2 space-y-1">
+                  <li class="flex items-center gap-2 text-sm text-blue-800">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-check-line"></i>
+                    </div>
+                    <span>Sorunlarınızı detaylı anlatabilirsiniz</span>
+                  </li>
+                  <li class="flex items-center gap-2 text-sm text-blue-800">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-check-line"></i>
+                    </div>
+                    <span>Size özel çözüm önerilerini dinleyebilirsiniz</span>
+                  </li>
+                  <li class="flex items-center gap-2 text-sm text-blue-800">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-check-line"></i>
+                    </div>
+                    <span>Tedavi sürecini planlayabilirsiniz</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="space-y-4 mb-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Uzman Tipi</label
+                  >
+                  <div class="grid grid-cols-3 gap-2">
+                    <button
+                      class="expert-type-btn bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                    >
+                      Psikolog
+                    </button>
+                    <button
+                      class="expert-type-btn bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                    >
+                      Diyetisyen
+                    </button>
+                    <button
+                      class="expert-type-btn bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                    >
+                      Doktor
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Tarih</label
+                  >
+                  <div class="border border-gray-200 rounded-lg p-3">
+                    <div class="flex justify-between items-center mb-3">
+                      <button class="text-gray-500 hover:text-gray-700 p-1">
+                        <i class="ri-arrow-left-s-line"></i>
+                      </button>
+                      <h3 class="font-medium text-gray-800">Haziran 2025</h3>
+                      <button class="text-gray-500 hover:text-gray-700 p-1">
+                        <i class="ri-arrow-right-s-line"></i>
+                      </button>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 mb-2 text-center">
+                      <span class="text-xs text-gray-500">Pt</span>
+                      <span class="text-xs text-gray-500">Sa</span>
+                      <span class="text-xs text-gray-500">Ça</span>
+                      <span class="text-xs text-gray-500">Pe</span>
+                      <span class="text-xs text-gray-500">Cu</span>
+                      <span class="text-xs text-gray-500">Ct</span>
+                      <span class="text-xs text-gray-500">Pa</span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 text-center">
+                      <span class="text-xs text-gray-300 p-2">29</span>
+                      <span class="text-xs text-gray-300 p-2">30</span>
+                      <span class="text-xs text-gray-300 p-2">31</span>
+                      <span
+                        class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                        >1</span
+                      >
+                      <span
+                        class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                        >2</span
+                      >
+                      <span
+                        class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                        >3</span
+                      >
+                      <span class="text-xs text-gray-400 p-2">4</span>
+                      <span class="text-xs text-gray-400 p-2">5</span>
+                      <span
+                        class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                        >6</span
+                      >
+                      <span
+                        class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                        >7</span
+                      >
+                      <span
+                        class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                        >8</span
+                      >
+                      <span
+                        class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                        >9</span
+                      >
+                      <span
+                        class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                        >10</span
+                      >
+                      <span class="text-xs text-gray-400 p-2">11</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Müsait Saatler</label
+                  >
+                  <div class="grid grid-cols-3 gap-2">
+                    <button
+                      class="time-slot bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                    >
+                      09:00
+                    </button>
+                    <button
+                      class="time-slot bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                    >
+                      10:30
+                    </button>
+                    <button
+                      class="time-slot bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                    >
+                      14:00
+                    </button>
+                    <button
+                      class="time-slot bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                    >
+                      15:30
+                    </button>
+                    <button
+                      class="time-slot bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                    >
+                      16:00
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Ad Soyad</label
+                  >
+                  <input
+                    type="text"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Adınızı ve soyadınızı girin"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >E-posta Adresi</label
+                  >
+                  <input
+                    type="email"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="E-posta adresinizi girin"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Telefon Numarası</label
+                  >
+                  <input
+                    type="tel"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Telefon numaranızı girin"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Görüşme Konusu</label
+                  >
+                  <textarea
+                    class="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    rows="3"
+                    placeholder="Görüşmek istediğiniz konuyu kısaca açıklayın"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="flex gap-3">
+                <button
+                  id="confirmFreeConsultation"
+                  class="flex-1 bg-primary text-white py-2 px-4 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap"
+                >
+                  Randevuyu Onayla
+                </button>
+                <button
+                  id="cancelFreeConsultation"
+                  class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap"
+                >
+                  İptal
+                </button>
               </div>
             </div>
             <div
@@ -213,7 +557,10 @@
                 </div>
               </div>
             </div>
-            <div class="px-3 py-2 hover:bg-gray-50 cursor-pointer">
+            <div
+              id="aboutEvitalBtn"
+              class="px-3 py-2 hover:bg-gray-50 cursor-pointer"
+            >
               <div class="flex items-center gap-3">
                 <div
                   class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-red-600"
@@ -245,8 +592,8 @@
                   Evital Sağlık'a Hoş Geldiniz
                 </h2>
                 <p class="text-gray-600">
-                  Size bugün nasıl yardımcı olabilirim? Sol menüdeki Gelişmiş
-                  Araçlar bölümünde hizmetlerimizi bulabilirsiniz.
+                  Size bugün nasıl yardımcı olabilirim? Sol menüdeki Hizmetler 
+                  bölümünde hizmetlerimizi bulabilirsiniz.
                 </p>
               </div>
               <!-- User Selection -->
@@ -734,6 +1081,109 @@
         const chatContainer = document.querySelector(".chat-container");
         if (chatContainer) {
           chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        const freeConsultationBtn = document.getElementById("freeConsultationBtn");
+        const freeConsultationDialog = document.getElementById(
+          "freeConsultationDialog",
+        );
+        const closeFreeConsultationDialog = document.getElementById(
+          "closeFreeConsultationDialog",
+        );
+        const cancelFreeConsultation = document.getElementById(
+          "cancelFreeConsultation",
+        );
+        const confirmFreeConsultation = document.getElementById(
+          "confirmFreeConsultation",
+        );
+        if (freeConsultationBtn && freeConsultationDialog) {
+          freeConsultationBtn.addEventListener("click", () => {
+            freeConsultationDialog.classList.remove("hidden");
+            const chatContainer = document.querySelector(
+              ".chat-container .max-w-3xl",
+            );
+            if (chatContainer) {
+              chatContainer.appendChild(freeConsultationDialog);
+              setTimeout(() => {
+                freeConsultationDialog.scrollIntoView({ behavior: "smooth" });
+              }, 100);
+            }
+          });
+          const expertTypeButtons =
+            freeConsultationDialog.querySelectorAll(".expert-type-btn");
+          expertTypeButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+              expertTypeButtons.forEach((btn) => {
+                btn.classList.remove("bg-primary", "text-white");
+                btn.classList.add(
+                  "bg-white",
+                  "border",
+                  "border-gray-200",
+                  "text-gray-700",
+                );
+              });
+              this.classList.remove(
+                "bg-white",
+                "border",
+                "border-gray-200",
+                "text-gray-700",
+              );
+              this.classList.add("bg-primary", "text-white");
+            });
+          });
+          const calendarDates = freeConsultationDialog.querySelectorAll(
+            ".grid-cols-7 .text-gray-700",
+          );
+          calendarDates.forEach((date) => {
+            date.addEventListener("click", function () {
+              calendarDates.forEach((d) => {
+                d.classList.remove("bg-blue-100", "text-blue-700", "font-medium");
+              });
+              this.classList.add("bg-blue-100", "text-blue-700", "font-medium");
+            });
+          });
+          const timeSlots = freeConsultationDialog.querySelectorAll(".time-slot");
+          timeSlots.forEach((slot) => {
+            slot.addEventListener("click", function () {
+              timeSlots.forEach((s) => {
+                s.classList.remove("bg-primary", "text-white");
+                s.classList.add(
+                  "bg-white",
+                  "border",
+                  "border-gray-200",
+                  "text-gray-700",
+                );
+              });
+              this.classList.remove(
+                "bg-white",
+                "border",
+                "border-gray-200",
+                "text-gray-700",
+              );
+              this.classList.add("bg-primary", "text-white");
+            });
+          });
+          closeFreeConsultationDialog.addEventListener("click", () => {
+            freeConsultationDialog.classList.add("hidden");
+          });
+          cancelFreeConsultation.addEventListener("click", () => {
+            freeConsultationDialog.classList.add("hidden");
+          });
+          confirmFreeConsultation.addEventListener("click", () => {
+            const successMessage = document.createElement("div");
+            successMessage.className =
+              "fixed bottom-4 right-4 bg-green-100 border border-green-200 text-green-700 px-4 py-2 rounded-lg flex items-center gap-2";
+            successMessage.innerHTML = `
+      <div class="w-5 h-5 flex items-center justify-center">
+      <i class="ri-check-line"></i>
+      </div>
+      <span>Ücretsiz danışma randevunuz başarıyla oluşturuldu</span>
+      `;
+            document.body.appendChild(successMessage);
+            setTimeout(() => {
+              successMessage.remove();
+            }, 3000);
+            freeConsultationDialog.classList.add("hidden");
+          });
         }
         const viewExpertsBtn = document.getElementById("viewExpertsBtn");
         if (viewExpertsBtn) {
@@ -1301,8 +1751,412 @@
         );
         const cancelDialog = document.getElementById("cancelDialog");
         const cancelButtons = document.querySelectorAll(".cancelAppointmentBtn");
+        const aboutEvitalBtn = document.getElementById("aboutEvitalBtn");
+        if (aboutEvitalBtn) {
+          aboutEvitalBtn.addEventListener("click", function () {
+            const chatContainer = document.querySelector(
+              ".chat-container .max-w-3xl",
+            );
+            if (chatContainer) {
+              const infoMessage = document.createElement("div");
+              infoMessage.className =
+                "chat-message bg-white p-4 rounded-lg shadow-sm self-start";
+              infoMessage.innerHTML = `
+      <div class="space-y-6">
+      <div class="border-b border-gray-100 pb-4">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Evital Sağlık'a Hoş Geldiniz</h3>
+      <p class="text-gray-600 mb-3">Evital, ruh sağlığı ve wellness hizmetlerini dijital platformda bir araya getiren yenilikçi bir sağlık teknolojisi şirketidir.</p>
+      </div>
+      <div class="space-y-4">
+      <h4 class="font-medium text-gray-800">Nasıl Çalışır?</h4>
+      <div class="grid gap-3">
+      <div class="flex items-start gap-3">
+      <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0 mt-1">
+      <i class="ri-search-line"></i>
+      </div>
+      <div>
+      <h5 class="font-medium text-gray-700 mb-1">Uzman Seçimi</h5>
+      <p class="text-sm text-gray-600">İhtiyacınıza en uygun uzmanı seçin. Tüm uzmanlarımız alanında deneyimli ve lisanslıdır.</p>
+      </div>
+      </div>
+      <div class="flex items-start gap-3">
+      <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 flex-shrink-0 mt-1">
+      <i class="ri-calendar-check-line"></i>
+      </div>
+      <div>
+      <h5 class="font-medium text-gray-700 mb-1">Randevu Planlama</h5>
+      <p class="text-sm text-gray-600">Size en uygun tarih ve saati seçin. Online veya yüz yüze görüşme seçeneğinizi belirleyin.</p>
+      </div>
+      </div>
+      <div class="flex items-start gap-3">
+      <div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 flex-shrink-0 mt-1">
+      <i class="ri-secure-payment-line"></i>
+      </div>
+      <div>
+      <h5 class="font-medium text-gray-700 mb-1">Güvenli Ödeme</h5>
+      <p class="text-sm text-gray-600">Kredi kartı veya banka kartı ile güvenli ödeme yapın. İptal durumunda tam iade garantisi.</p>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="space-y-4">
+      <h4 class="font-medium text-gray-800">Hizmetlerimiz</h4>
+      <div class="grid gap-3">
+      <div class="flex items-center gap-3 p-3 border border-gray-100 rounded-lg">
+      <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+      <i class="ri-mental-health-line"></i>
+      </div>
+      <div>
+      <h5 class="font-medium text-gray-700">Online Terapi</h5>
+      <p class="text-sm text-gray-600">Video görüşme ile uzman psikologlarla görüşün</p>
+      </div>
+      </div>
+      <div class="flex items-center gap-3 p-3 border border-gray-100 rounded-lg">
+      <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center text-green-600">
+      <i class="ri-heart-pulse-line"></i>
+      </div>
+      <div>
+      <h5 class="font-medium text-gray-700">Sağlık Danışmanlığı</h5>
+      <p class="text-sm text-gray-600">Beslenme ve yaşam tarzı danışmanlığı</p>
+      </div>
+      </div>
+      <div class="flex items-center gap-3 p-3 border border-gray-100 rounded-lg">
+      <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center text-yellow-600">
+      <i class="ri-group-line"></i>
+      </div>
+      <div>
+      <h5 class="font-medium text-gray-700">Grup Terapileri</h5>
+      <p class="text-sm text-gray-600">Benzer deneyimleri paylaşan kişilerle grup seansları</p>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="space-y-4">
+      <h4 class="font-medium text-gray-800">Sık Sorulan Sorular</h4>
+      <div class="space-y-3">
+      <div class="border border-gray-100 rounded-lg p-3">
+      <h5 class="font-medium text-gray-700 mb-2">Görüşmeler ne kadar sürüyor?</h5>
+      <p class="text-sm text-gray-600">Standart seanslar 50 dakika sürmektedir. İlk görüşme 60 dakika olabilir.</p>
+      </div>
+      <div class="border border-gray-100 rounded-lg p-3">
+      <h5 class="font-medium text-gray-700 mb-2">İptal politikanız nedir?</h5>
+      <p class="text-sm text-gray-600">24 saat öncesine kadar yapılan iptallerde tam iade yapılır.</p>
+      </div>
+      <div class="border border-gray-100 rounded-lg p-3">
+      <h5 class="font-medium text-gray-700 mb-2">Gizlilik politikanız nedir?</h5>
+      <p class="text-sm text-gray-600">Tüm görüşmeler ve kişisel bilgiler KVKK kapsamında gizli tutulur.</p>
+      </div>
+      </div>
+      </div>
+      <div class="flex gap-3">
+      <button id="startBookingBtn" class="bg-primary text-white py-2 px-4 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap">
+      Randevu Al
+      </button>
+      <button id="contactSupportBtn" class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+      Destek Al
+      </button>
+      </div>
+      </div>
+      `;
+              chatContainer.appendChild(infoMessage);
+              setTimeout(() => {
+                infoMessage.scrollIntoView({ behavior: "smooth" });
+                const startBookingBtn = infoMessage.querySelector("#startBookingBtn");
+                const contactSupportBtn =
+                  infoMessage.querySelector("#contactSupportBtn");
+                if (startBookingBtn) {
+                  startBookingBtn.addEventListener("click", function () {
+                    const userMessage = document.createElement("div");
+                    userMessage.className =
+                      "chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end";
+                    userMessage.innerHTML = `<p class="text-blue-800">Randevu almak istiyorum</p>`;
+                    chatContainer.appendChild(userMessage);
+                    setTimeout(() => {
+                      userMessage.scrollIntoView({ behavior: "smooth" });
+                      const systemMessage = document.createElement("div");
+                      systemMessage.className =
+                        "chat-message bg-white p-4 rounded-lg shadow-sm self-start";
+                      systemMessage.innerHTML = `
+      <p class="text-gray-700 mb-3">Lütfen görüşmek istediğiniz uzman tipini seçin:</p>
+      <div class="flex flex-wrap gap-2 mb-4">
+      <button class="expert-type-btn bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+      Psikolog
+      </button>
+      <button class="expert-type-btn bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+      Diyetisyen
+      </button>
+      <button class="expert-type-btn bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+      Doktor
+      </button>
+      </div>
+      `;
+                      chatContainer.appendChild(systemMessage);
+                      const expertTypeButtons =
+                        systemMessage.querySelectorAll(".expert-type-btn");
+                      expertTypeButtons.forEach((button) => {
+                        button.addEventListener("click", function () {
+                          expertTypeButtons.forEach((btn) => {
+                            btn.classList.remove("bg-primary", "text-white");
+                            btn.classList.add(
+                              "bg-white",
+                              "border",
+                              "border-gray-200",
+                              "text-gray-700",
+                            );
+                          });
+                          this.classList.remove(
+                            "bg-white",
+                            "border",
+                            "border-gray-200",
+                            "text-gray-700",
+                          );
+                          this.classList.add("bg-primary", "text-white");
+                          const userMessage = document.createElement("div");
+                          userMessage.className =
+                            "chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end";
+                          userMessage.innerHTML = `<p class="text-blue-800">${this.textContent.trim()}</p>`;
+                          chatContainer.appendChild(userMessage);
+                          setTimeout(() => {
+                            userMessage.scrollIntoView({ behavior: "smooth" });
+                            const expertType = this.textContent.trim().toLowerCase();
+                            showSpecialtySelection(expertType, chatContainer);
+                          }, 100);
+                        });
+                      });
+                      systemMessage.scrollIntoView({ behavior: "smooth" });
+                    }, 100);
+                  });
+                }
+                if (contactSupportBtn) {
+                  contactSupportBtn.addEventListener("click", function () {
+                    const userMessage = document.createElement("div");
+                    userMessage.className =
+                      "chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end";
+                    userMessage.innerHTML = `<p class="text-blue-800">Destek almak istiyorum</p>`;
+                    chatContainer.appendChild(userMessage);
+                    setTimeout(() => {
+                      userMessage.scrollIntoView({ behavior: "smooth" });
+                      const systemMessage = document.createElement("div");
+                      systemMessage.className =
+                        "chat-message bg-white p-4 rounded-lg shadow-sm self-start";
+                      systemMessage.innerHTML = `
+      <p class="text-gray-700 mb-3">Size nasıl yardımcı olabilirim?</p>
+      <div class="flex flex-wrap gap-2">
+      <button class="support-option-btn bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm">
+      Teknik Destek
+      </button>
+      <button class="support-option-btn bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm">
+      Ödeme Sorunları
+      </button>
+      <button class="support-option-btn bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm">
+      Randevu İşlemleri
+      </button>
+      <button class="support-option-btn bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm">
+      Diğer
+      </button>
+      </div>
+      `;
+                      chatContainer.appendChild(systemMessage);
+                      systemMessage.scrollIntoView({ behavior: "smooth" });
+                    }, 100);
+                  });
+                }
+              }, 100);
+            }
+          });
+        }
         const confirmCancel = document.getElementById("confirmCancel");
         const cancelCancelDialog = document.getElementById("cancelCancelDialog");
+        const rescheduleButtons = document.querySelectorAll(
+          ".rescheduleAppointmentBtn",
+        );
+        rescheduleButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const appointmentDetails = button
+              .closest(".border")
+              .querySelector("h4").textContent;
+            const chatContainer = document.querySelector(
+              ".chat-container .max-w-3xl",
+            );
+            if (chatContainer) {
+              const rescheduleDialog = document.createElement("div");
+              rescheduleDialog.id = "rescheduleDialog";
+              rescheduleDialog.className =
+                "chat-message bg-white p-4 rounded-lg shadow-sm self-start max-w-md w-full mb-4";
+              rescheduleDialog.innerHTML = `
+      <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold text-gray-800">Randevuyu Yeniden Planla</h3>
+      <button id="closeRescheduleDialog" class="text-gray-400 hover:text-gray-600">
+      <div class="w-5 h-5 flex items-center justify-center">
+      <i class="ri-close-line"></i>
+      </div>
+      </button>
+      </div>
+      <div class="mb-4">
+      <p class="text-sm text-gray-600 mb-2">Mevcut Randevu:</p>
+      <div class="bg-gray-50 p-3 rounded-lg">
+      <div class="flex items-center gap-3 text-sm text-gray-600">
+      <div class="flex items-center gap-1">
+      <div class="w-4 h-4 flex items-center justify-center">
+      <i class="ri-calendar-line"></i>
+      </div>
+      <span>3 Haziran 2025</span>
+      </div>
+      <div class="flex items-center gap-1">
+      <div class="w-4 h-4 flex items-center justify-center">
+      <i class="ri-time-line"></i>
+      </div>
+      <span>10:30</span>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="border border-gray-200 rounded-lg p-3 mb-4">
+      <div class="flex justify-between items-center mb-3">
+      <button id="prevMonth" class="text-gray-500 hover:text-gray-700 p-1">
+      <i class="ri-arrow-left-s-line"></i>
+      </button>
+      <h3 class="font-medium text-gray-800">Haziran 2025</h3>
+      <button id="nextMonth" class="text-gray-500 hover:text-gray-700 p-1">
+      <i class="ri-arrow-right-s-line"></i>
+      </button>
+      </div>
+      <div class="grid grid-cols-7 gap-1 mb-2 text-center">
+      <span class="text-xs text-gray-500">Pt</span>
+      <span class="text-xs text-gray-500">Sa</span>
+      <span class="text-xs text-gray-500">Ça</span>
+      <span class="text-xs text-gray-500">Pe</span>
+      <span class="text-xs text-gray-500">Cu</span>
+      <span class="text-xs text-gray-500">Ct</span>
+      <span class="text-xs text-gray-500">Pa</span>
+      </div>
+      <div class="grid grid-cols-7 gap-1 text-center">
+      <span class="text-xs text-gray-300 p-2">29</span>
+      <span class="text-xs text-gray-300 p-2">30</span>
+      <span class="text-xs text-gray-300 p-2">31</span>
+      <span class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded">1</span>
+      <span class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded">2</span>
+      <span class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded available-date">3</span>
+      <span class="text-xs text-gray-400 p-2">4</span>
+      <span class="text-xs text-gray-400 p-2">5</span>
+      <span class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded available-date">6</span>
+      <span class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded available-date">7</span>
+      <span class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded available-date">8</span>
+      <span class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded available-date">9</span>
+      <span class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded available-date">10</span>
+      <span class="text-xs text-gray-400 p-2">11</span>
+      </div>
+      </div>
+      <div id="timeSlots" class="mb-4">
+      <p class="text-sm text-gray-700 mb-2">Müsait Saatler:</p>
+      <div class="grid grid-cols-3 gap-2">
+      <button class="time-slot bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm">
+      09:00
+      </button>
+      <button class="time-slot bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm">
+      10:30
+      </button>
+      <button class="time-slot bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm">
+      14:00
+      </button>
+      <button class="time-slot bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm">
+      15:30
+      </button>
+      <button class="time-slot bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm">
+      16:00
+      </button>
+      </div>
+      </div>
+      <div class="flex gap-3">
+      <button id="confirmReschedule" class="flex-1 bg-primary text-white py-2 px-4 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap" disabled>
+      Randevuyu Güncelle
+      </button>
+      <button id="cancelReschedule" class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+      İptal
+      </button>
+      </div>
+      `;
+              chatContainer.appendChild(rescheduleDialog);
+              appointmentDialog.classList.add("hidden");
+              const closeRescheduleDialog = document.getElementById(
+                "closeRescheduleDialog",
+              );
+              const cancelReschedule = document.getElementById("cancelReschedule");
+              const confirmReschedule = document.getElementById("confirmReschedule");
+              const availableDates =
+                rescheduleDialog.querySelectorAll(".available-date");
+              const timeSlots = rescheduleDialog.querySelectorAll(".time-slot");
+              let selectedDate = null;
+              let selectedTime = null;
+              availableDates.forEach((date) => {
+                date.addEventListener("click", () => {
+                  availableDates.forEach((d) =>
+                    d.classList.remove("bg-blue-100", "text-blue-700", "font-medium"),
+                  );
+                  date.classList.add("bg-blue-100", "text-blue-700", "font-medium");
+                  selectedDate = date.textContent;
+                  updateConfirmButton();
+                });
+              });
+              timeSlots.forEach((slot) => {
+                slot.addEventListener("click", () => {
+                  timeSlots.forEach((s) => {
+                    s.classList.remove("bg-primary", "text-white");
+                    s.classList.add(
+                      "bg-white",
+                      "border",
+                      "border-gray-200",
+                      "text-gray-700",
+                    );
+                  });
+                  slot.classList.remove(
+                    "bg-white",
+                    "border",
+                    "border-gray-200",
+                    "text-gray-700",
+                  );
+                  slot.classList.add("bg-primary", "text-white");
+                  selectedTime = slot.textContent.trim();
+                  updateConfirmButton();
+                });
+              });
+              function updateConfirmButton() {
+                confirmReschedule.disabled = !(selectedDate && selectedTime);
+                confirmReschedule.classList.toggle(
+                  "opacity-50",
+                  !selectedDate || !selectedTime,
+                );
+              }
+              closeRescheduleDialog.addEventListener("click", () => {
+                rescheduleDialog.remove();
+              });
+              cancelReschedule.addEventListener("click", () => {
+                rescheduleDialog.remove();
+              });
+              confirmReschedule.addEventListener("click", () => {
+                if (selectedDate && selectedTime) {
+                  rescheduleDialog.remove();
+                  const successMessage = document.createElement("div");
+                  successMessage.className =
+                    "fixed bottom-4 right-4 bg-green-100 border border-green-200 text-green-700 px-4 py-2 rounded-lg flex items-center gap-2";
+                  successMessage.innerHTML = `
+      <div class="w-5 h-5 flex items-center justify-center">
+      <i class="ri-check-line"></i>
+      </div>
+      <span>Randevunuz başarıyla güncellendi</span>
+      `;
+                  document.body.appendChild(successMessage);
+                  setTimeout(() => {
+                    successMessage.remove();
+                  }, 3000);
+                }
+              });
+              setTimeout(() => {
+                rescheduleDialog.scrollIntoView({ behavior: "smooth" });
+              }, 100);
+            }
+          });
+        });
         appointmentManagementBtn.addEventListener("click", () => {
           appointmentDialog.classList.remove("hidden");
           const chatContainer = document.querySelector(".chat-container .max-w-3xl");

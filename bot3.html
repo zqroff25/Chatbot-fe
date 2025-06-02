@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evital Health Chat</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#3b82f6", secondary: "#6366f1" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+      font-family: 'Inter', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      }
+      .chat-message {
+      max-width: 80%;
+      animation: fadeIn 0.3s ease-in-out;
+      }
+      .chat-container::-webkit-scrollbar {
+      width: 6px;
+      }
+      .chat-container::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      }
+      .chat-container::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 8px;
+      }
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+      }
+      @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <div class="flex h-full">
+      <!-- Left Sidebar -->
+      <div class="w-60 bg-white border-r border-gray-200 flex flex-col h-full">
+        <!-- New Chat Button -->
+        <div class="p-4">
+          <button
+            class="flex items-center justify-center w-full gap-2 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap"
+          >
+            <div class="w-5 h-5 flex items-center justify-center">
+              <i class="ri-add-line"></i>
+            </div>
+            <span>Yeni Sohbet</span>
+          </button>
+        </div>
+        <!-- Chat History -->
+        <div
+          class="flex-1 p-4 flex items-center justify-center text-gray-500 text-sm"
+        >
+          Sohbet Geçmişi Yok
+        </div>
+        <!-- Advanced Tools -->
+        <div class="border-t border-gray-200">
+          <div
+            id="advancedToolsHeader"
+            class="p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
+          >
+            <div class="flex items-center gap-2">
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-tools-line"></i>
+              </div>
+              <span class="text-gray-700 font-medium">Gelişmiş Araçlar</span>
+            </div>
+            <div
+              class="w-5 h-5 flex items-center justify-center transition-transform duration-200"
+            >
+              <i class="ri-arrow-down-s-line"></i>
+            </div>
+          </div>
+          <!-- Tool Items -->
+          <div id="advancedToolsList" class="hidden">
+            <div
+              id="appointmentManagementBtn"
+              class="px-3 py-2 hover:bg-gray-50 cursor-pointer"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"
+                >
+                  <i class="ri-calendar-line"></i>
+                </div>
+                <div>
+                  <div class="text-gray-700 text-sm">Randevu Yönetimi</div>
+                  <div class="text-gray-500 text-xs">
+                    Görüntüle, yeniden planla veya iptal et
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              id="cancelDialog"
+              class="chat-message bg-white p-4 rounded-lg shadow-sm self-start max-w-md w-full mb-4 hidden"
+            >
+              <div class="bg-white rounded-lg w-full max-w-md mx-4 p-4">
+                <div class="text-center mb-4">
+                  <div
+                    class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3"
+                  >
+                    <i class="ri-error-warning-line text-red-600 text-xl"></i>
+                  </div>
+                  <h3 class="text-lg font-semibold text-gray-800 mb-2">
+                    Randevuyu İptal Et
+                  </h3>
+                  <p class="text-gray-600 text-sm">
+                    Bu randevuyu iptal etmek istediğinizden emin misiniz? Bu
+                    işlem geri alınamaz.
+                  </p>
+                </div>
+                <div class="flex gap-3 justify-center">
+                  <button
+                    id="confirmCancel"
+                    class="bg-red-600 text-white py-2 px-4 rounded-button hover:bg-red-700 transition-colors whitespace-nowrap"
+                  >
+                    Randevuyu İptal Et
+                  </button>
+                  <button
+                    id="cancelCancelDialog"
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap"
+                  >
+                    Vazgeç
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="px-3 py-2 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600"
+                >
+                  <i class="ri-customer-service-line"></i>
+                </div>
+                <div>
+                  <div class="text-gray-700 text-sm">Ücretsiz Danışma</div>
+                  <div class="text-gray-500 text-xs">
+                    15 dakikalık uzman görüşmesi
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              id="bookAppointmentBtn"
+              class="px-3 py-2 hover:bg-gray-50 cursor-pointer"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600"
+                >
+                  <i class="ri-calendar-check-line"></i>
+                </div>
+                <div>
+                  <div class="text-gray-700 text-sm">Randevu Al</div>
+                  <div class="text-gray-500 text-xs">
+                    Uzmanlarla planlama yap
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              id="viewExpertsBtn"
+              class="px-3 py-2 hover:bg-gray-50 cursor-pointer"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-6 h-6 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600"
+                >
+                  <i class="ri-team-line"></i>
+                </div>
+                <div>
+                  <div class="text-gray-700 text-sm">Uzmanları Görüntüle</div>
+                  <div class="text-gray-500 text-xs">
+                    Uzmanlarımıza göz atın
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="px-3 py-2 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-red-600"
+                >
+                  <i class="ri-information-line"></i>
+                </div>
+                <div>
+                  <div class="text-gray-700 text-sm">Evital Hakkında</div>
+                  <div class="text-gray-500 text-xs">
+                    Hizmetlerimiz nasıl çalışır öğrenin
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Main Chat Area -->
+      <div class="flex-1 flex flex-col h-full">
+        <!-- Chat Content -->
+        <div class="flex-1 overflow-y-auto chat-container p-4">
+          <div class="max-w-3xl mx-auto">
+            <!-- Welcome Message -->
+            <div class="flex flex-col gap-4 mb-6">
+              <div
+                class="chat-message bg-white p-4 rounded-lg shadow-sm self-start"
+              >
+                <h2 class="text-xl font-semibold text-gray-800 mb-2">
+                  Evital Sağlık'a Hoş Geldiniz
+                </h2>
+                <p class="text-gray-600">
+                  Size bugün nasıl yardımcı olabilirim? Sol menüdeki Gelişmiş
+                  Araçlar bölümünde hizmetlerimizi bulabilirsiniz.
+                </p>
+              </div>
+              <!-- User Selection -->
+              <div
+                class="chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end"
+              >
+                <p class="text-blue-800">Randevu almak istiyorum</p>
+              </div>
+              <!-- System Response -->
+              <div
+                class="chat-message bg-white p-4 rounded-lg shadow-sm self-start"
+              >
+                <p class="text-gray-700 mb-3">
+                  Harika! Lütfen görüşmek istediğiniz uzman tipini seçin:
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <button
+                    class="bg-primary text-white py-2 px-4 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap"
+                  >
+                    Psikolog
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap"
+                  >
+                    Diyetisyen
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap"
+                  >
+                    Doktor
+                  </button>
+                </div>
+              </div>
+              <!-- User Selection -->
+              <div
+                class="chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end"
+              >
+                <p class="text-blue-800">Psikolog</p>
+              </div>
+              <!-- System Response -->
+              <div
+                class="chat-message bg-white p-4 rounded-lg shadow-sm self-start"
+              >
+                <p class="text-gray-700 mb-3">Lütfen spesifik alanı seçin:</p>
+                <div class="grid grid-cols-2 gap-2 mb-4 sm:grid-cols-3">
+                  <button
+                    class="bg-primary text-white py-2 px-3 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap text-sm"
+                  >
+                    Kaygı & Stres
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    Depresyon
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    İlişkiler
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    Özgüven
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    Travma
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    Diğer
+                  </button>
+                </div>
+              </div>
+              <!-- User Selection -->
+              <div
+                class="chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end"
+              >
+                <p class="text-blue-800">Kaygı & Stres</p>
+              </div>
+              <!-- System Response with Specialists -->
+              <div
+                class="chat-message bg-white p-4 rounded-lg shadow-sm self-start"
+              >
+                <p class="text-gray-700 mb-4">
+                  Kaygı & Stres için mevcut uzmanlarımız:
+                </p>
+                <div class="grid gap-4 mb-4">
+                  <!-- Specialist 1 -->
+                  <div
+                    class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    <div class="flex">
+                      <div
+                        class="w-24 h-24 bg-gray-100 flex items-center justify-center"
+                      >
+                        <div
+                          class="w-12 h-12 flex items-center justify-center text-gray-400"
+                        >
+                          <i class="ri-user-line ri-2x"></i>
+                        </div>
+                      </div>
+                      <div class="p-3 flex-1">
+                        <div class="flex justify-between items-start">
+                          <div>
+                            <h3 class="font-medium text-gray-800">
+                              Dr. Ayşe Yılmaz
+                            </h3>
+                            <p class="text-sm text-gray-500">Klinik Psikolog</p>
+                          </div>
+                          <span
+                            class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full"
+                            >Müsait</span
+                          >
+                        </div>
+                        <div class="mt-2 flex gap-2">
+                          <button
+                            class="bg-primary text-white text-sm py-1 px-3 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap"
+                          >
+                            Randevu Al
+                          </button>
+                          <button
+                            class="view-profile-btn bg-white border border-gray-200 text-gray-700 text-sm py-1 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap"
+                          >
+                            Profili Görüntüle
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Specialist 2 -->
+                  <div
+                    class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    <div class="flex">
+                      <div
+                        class="w-24 h-24 bg-gray-100 flex items-center justify-center"
+                      >
+                        <div
+                          class="w-12 h-12 flex items-center justify-center text-gray-400"
+                        >
+                          <i class="ri-user-line ri-2x"></i>
+                        </div>
+                      </div>
+                      <div class="p-3 flex-1">
+                        <div class="flex justify-between items-start">
+                          <div>
+                            <h3 class="font-medium text-gray-800">
+                              Dr. Mehmet Demir
+                            </h3>
+                            <p class="text-sm text-gray-500">
+                              Bilişsel Davranışçı Terapist
+                            </p>
+                          </div>
+                          <span
+                            class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full"
+                            >Müsait</span
+                          >
+                        </div>
+                        <div class="mt-2 flex gap-2">
+                          <button
+                            class="bg-primary text-white text-sm py-1 px-3 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap"
+                          >
+                            Randevu Al
+                          </button>
+                          <button
+                            class="view-profile-btn bg-white border border-gray-200 text-gray-700 text-sm py-1 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap"
+                          >
+                            Profili Görüntüle
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- User Selection -->
+              <div
+                class="chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end"
+              >
+                <p class="text-blue-800">
+                  Dr. Ayşe Yılmaz ile randevu almak istiyorum
+                </p>
+              </div>
+              <!-- System Response with Calendar -->
+              <div
+                class="chat-message bg-white p-4 rounded-lg shadow-sm self-start"
+              >
+                <p class="text-gray-700 mb-3">
+                  Lütfen Dr. Ayşe Yılmaz ile randevunuz için bir tarih ve saat
+                  seçin:
+                </p>
+                <!-- Calendar View -->
+                <div class="mb-4 border border-gray-200 rounded-lg p-3">
+                  <div class="flex justify-between items-center mb-3">
+                    <button
+                      class="text-gray-500 hover:text-gray-700 p-1 whitespace-nowrap"
+                    >
+                      <i class="ri-arrow-left-s-line"></i>
+                    </button>
+                    <h3 class="font-medium text-gray-800">Haziran 2025</h3>
+                    <button
+                      class="text-gray-500 hover:text-gray-700 p-1 whitespace-nowrap"
+                    >
+                      <i class="ri-arrow-right-s-line"></i>
+                    </button>
+                  </div>
+                  <!-- Days of Week -->
+                  <div class="grid grid-cols-7 gap-1 mb-2 text-center">
+                    <span class="text-xs text-gray-500">Mo</span>
+                    <span class="text-xs text-gray-500">Tu</span>
+                    <span class="text-xs text-gray-500">We</span>
+                    <span class="text-xs text-gray-500">Th</span>
+                    <span class="text-xs text-gray-500">Fr</span>
+                    <span class="text-xs text-gray-500">Sa</span>
+                    <span class="text-xs text-gray-500">Su</span>
+                  </div>
+                  <!-- Calendar Grid -->
+                  <div class="grid grid-cols-7 gap-1 text-center">
+                    <!-- Previous Month -->
+                    <span class="text-xs text-gray-300 p-2">26</span>
+                    <span class="text-xs text-gray-300 p-2">27</span>
+                    <span class="text-xs text-gray-300 p-2">28</span>
+                    <span class="text-xs text-gray-300 p-2">29</span>
+                    <span class="text-xs text-gray-300 p-2">30</span>
+                    <span class="text-xs text-gray-300 p-2">31</span>
+                    <!-- Current Month -->
+                    <span class="text-xs text-gray-400 p-2">1</span>
+                    <span
+                      class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                      >2</span
+                    >
+                    <span
+                      class="text-xs text-gray-700 p-2 bg-blue-100 text-blue-700 font-medium rounded"
+                      >3</span
+                    >
+                    <span
+                      class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                      >4</span
+                    >
+                    <span
+                      class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                      >5</span
+                    >
+                    <span
+                      class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                      >6</span
+                    >
+                    <span class="text-xs text-gray-400 p-2">7</span>
+                    <span class="text-xs text-gray-400 p-2">8</span>
+                    <span
+                      class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                      >9</span
+                    >
+                    <span
+                      class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                      >10</span
+                    >
+                    <span
+                      class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                      >11</span
+                    >
+                    <span
+                      class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                      >12</span
+                    >
+                    <span
+                      class="text-xs text-gray-700 p-2 hover:bg-gray-100 cursor-pointer rounded"
+                      >13</span
+                    >
+                    <span class="text-xs text-gray-400 p-2">14</span>
+                    <!-- Continue with more dates... -->
+                  </div>
+                </div>
+                <!-- Time Slots -->
+                <p class="text-gray-700 mb-2">
+                  3 Haziran 2025 için müsait saatler:
+                </p>
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    9:00 AM
+                  </button>
+                  <button
+                    class="bg-primary text-white py-2 px-3 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap text-sm"
+                  >
+                    10:30 AM
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    1:00 PM
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    2:30 PM
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    4:00 PM
+                  </button>
+                </div>
+              </div>
+              <!-- User Selection -->
+              <div
+                class="chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end"
+              >
+                <p class="text-blue-800">3 Haziran 10:30 benim için uygun</p>
+              </div>
+              <!-- System Response with Form -->
+              <div
+                class="chat-message bg-white p-4 rounded-lg shadow-sm self-start"
+              >
+                <p class="text-gray-700 mb-4">
+                  Harika! Randevuyu tamamlamak için lütfen bilgilerinizi
+                  doldurun:
+                </p>
+                <div class="space-y-3 mb-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Ad Soyad</label
+                    >
+                    <input
+                      type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="Adınızı ve soyadınızı girin"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >E-posta Adresi</label
+                    >
+                    <input
+                      type="email"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="E-posta adresinizi girin"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Telefon Numarası</label
+                    >
+                    <input
+                      type="tel"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="Telefon numaranızı girin"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Sorununuzun Kısa Açıklaması</label
+                    >
+                    <textarea
+                      class="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      rows="3"
+                      placeholder="Lütfen görüşmek istediğiniz konuyu kısaca açıklayın"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <button
+                    class="bg-primary text-white py-2 px-4 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap"
+                  >
+                    Randevuyu Onayla
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap"
+                  >
+                    İptal
+                  </button>
+                </div>
+              </div>
+              <!-- Final Confirmation -->
+              <div
+                class="chat-message bg-white p-4 rounded-lg shadow-sm self-start"
+              >
+                <div
+                  class="bg-green-50 border border-green-100 p-4 rounded-lg mb-4"
+                >
+                  <div class="flex items-center gap-2 mb-2">
+                    <div
+                      class="w-5 h-5 flex items-center justify-center text-green-500"
+                    >
+                      <i class="ri-check-line"></i>
+                    </div>
+                    <h3 class="font-medium text-green-800">
+                      Randevu Onaylandı
+                    </h3>
+                  </div>
+                  <p class="text-green-700 text-sm mb-3">
+                    Randevunuz başarıyla oluşturuldu.
+                  </p>
+                  <div class="bg-white p-3 rounded border border-green-100">
+                    <div class="flex justify-between mb-2">
+                      <span class="text-sm text-gray-500">Uzman:</span>
+                      <span class="text-sm text-gray-800 font-medium"
+                        >Dr. Ayşe Yılmaz</span
+                      >
+                    </div>
+                    <div class="flex justify-between mb-2">
+                      <span class="text-sm text-gray-500">Tarih:</span>
+                      <span class="text-sm text-gray-800 font-medium"
+                        >3 Haziran 2025</span
+                      >
+                    </div>
+                    <div class="flex justify-between mb-2">
+                      <span class="text-sm text-gray-500">Saat:</span>
+                      <span class="text-sm text-gray-800 font-medium"
+                        >10:30</span
+                      >
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-sm text-gray-500">Süre:</span>
+                      <span class="text-sm text-gray-800 font-medium"
+                        >50 dakika</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <p class="text-gray-700 mb-3">
+                  Detaylar ve talimatlarla birlikte bir onay e-postası
+                  alacaksınız. Bugün size başka nasıl yardımcı olabilirim?
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    Randevularımı Görüntüle
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    Başka Randevu Al
+                  </button>
+                  <button
+                    class="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm"
+                  >
+                    Hayır, Bu Kadar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Input Area -->
+        <div class="border-t border-gray-200 p-4">
+          <div class="max-w-3xl mx-auto">
+            <div class="relative">
+              <input
+                type="text"
+                class="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Bir mesaj gönderin"
+              />
+              <div
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2"
+              >
+                <button
+                  class="text-gray-400 hover:text-gray-600 p-1 whitespace-nowrap"
+                >
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-attachment-2"></i>
+                  </div>
+                </button>
+                <button
+                  class="bg-primary text-white p-1 rounded-full hover:bg-blue-600 whitespace-nowrap"
+                >
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-send-plane-fill"></i>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script id="chatInteraction">
+      document.addEventListener("DOMContentLoaded", function () {
+        const chatContainer = document.querySelector(".chat-container");
+        if (chatContainer) {
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        const viewExpertsBtn = document.getElementById("viewExpertsBtn");
+        if (viewExpertsBtn) {
+          viewExpertsBtn.addEventListener("click", function () {
+            const chatContentContainer = document.querySelector(
+              ".chat-container .max-w-3xl",
+            );
+            if (chatContentContainer) {
+              const expertsListingMessage = document.createElement("div");
+              expertsListingMessage.className =
+                "chat-message bg-white p-4 rounded-lg shadow-sm self-start";
+              expertsListingMessage.innerHTML = `
+      <div class="mb-6">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Uzmanlarımız</h3>
+      <div class="flex flex-wrap gap-2 mb-6">
+      <button class="filter-btn bg-primary text-white py-1.5 px-3 rounded-button text-sm whitespace-nowrap">Tümü</button>
+      <button class="filter-btn bg-white border border-gray-200 text-gray-700 py-1.5 px-3 rounded-button text-sm whitespace-nowrap">Psikolog</button>
+      <button class="filter-btn bg-white border border-gray-200 text-gray-700 py-1.5 px-3 rounded-button text-sm whitespace-nowrap">Diyetisyen</button>
+      <button class="filter-btn bg-white border border-gray-200 text-gray-700 py-1.5 px-3 rounded-button text-sm whitespace-nowrap">Doktor</button>
+      </div>
+      <div class="grid gap-4">
+      <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+      <div class="flex">
+      <div class="w-24 h-24 bg-gray-100 flex items-center justify-center">
+      <div class="w-12 h-12 flex items-center justify-center text-gray-400">
+      <i class="ri-user-line ri-2x"></i>
+      </div>
+      </div>
+      <div class="p-3 flex-1">
+      <div class="flex justify-between items-start mb-2">
+      <div>
+      <h3 class="font-medium text-gray-800">Dr. Ayşe Yılmaz</h3>
+      <p class="text-sm text-gray-500">Klinik Psikolog</p>
+      <div class="flex items-center gap-2 mt-1">
+      <div class="flex text-yellow-400 text-xs">
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      </div>
+      <span class="text-sm text-gray-500">(128)</span>
+      </div>
+      </div>
+      <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">Müsait</span>
+      </div>
+      <div class="flex flex-wrap gap-2 mb-3">
+      <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">15+ Yıl Deneyim</span>
+      <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full">1000+ Danışan</span>
+      </div>
+      <div class="flex gap-2">
+      <button class="expert-select-btn bg-primary text-white text-sm py-1.5 px-3 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap">
+      Randevu Al
+      </button>
+      <button class="view-profile-btn bg-white border border-gray-200 text-gray-700 text-sm py-1.5 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+      Profili Görüntüle
+      </button>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+      <div class="flex">
+      <div class="w-24 h-24 bg-gray-100 flex items-center justify-center">
+      <div class="w-12 h-12 flex items-center justify-center text-gray-400">
+      <i class="ri-user-line ri-2x"></i>
+      </div>
+      </div>
+      <div class="p-3 flex-1">
+      <div class="flex justify-between items-start mb-2">
+      <div>
+      <h3 class="font-medium text-gray-800">Dr. Mehmet Demir</h3>
+      <p class="text-sm text-gray-500">Bilişsel Davranışçı Terapist</p>
+      <div class="flex items-center gap-2 mt-1">
+      <div class="flex text-yellow-400 text-xs">
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      </div>
+      <span class="text-sm text-gray-500">(95)</span>
+      </div>
+      </div>
+      <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">Müsait</span>
+      </div>
+      <div class="flex flex-wrap gap-2 mb-3">
+      <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">12+ Yıl Deneyim</span>
+      <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full">800+ Danışan</span>
+      </div>
+      <div class="flex gap-2">
+      <button class="expert-select-btn bg-primary text-white text-sm py-1.5 px-3 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap">
+      Randevu Al
+      </button>
+      <button class="view-profile-btn bg-white border border-gray-200 text-gray-700 text-sm py-1.5 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+      Profili Görüntüle
+      </button>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      `;
+              chatContentContainer.appendChild(expertsListingMessage);
+              setTimeout(() => {
+                expertsListingMessage.scrollIntoView({ behavior: "smooth" });
+              }, 100);
+              const filterButtons =
+                expertsListingMessage.querySelectorAll(".filter-btn");
+              filterButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                  filterButtons.forEach((btn) => {
+                    btn.classList.remove("bg-primary", "text-white");
+                    btn.classList.add(
+                      "bg-white",
+                      "border",
+                      "border-gray-200",
+                      "text-gray-700",
+                    );
+                  });
+                  this.classList.remove(
+                    "bg-white",
+                    "border",
+                    "border-gray-200",
+                    "text-gray-700",
+                  );
+                  this.classList.add("bg-primary", "text-white");
+                });
+              });
+              const expertSelectButtons =
+                expertsListingMessage.querySelectorAll(".expert-select-btn");
+              const viewProfileButtons =
+                expertsListingMessage.querySelectorAll(".view-profile-btn");
+              viewProfileButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                  const expertName =
+                    this.closest(".flex").querySelector("h3").textContent;
+                  showDoctorProfile(chatContentContainer, expertName);
+                });
+              });
+              expertSelectButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                  const expertName =
+                    this.closest(".flex").querySelector("h3").textContent;
+                  const userMessage = document.createElement("div");
+                  userMessage.className =
+                    "chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end";
+                  userMessage.innerHTML = `<p class="text-blue-800">${expertName} ile randevu almak istiyorum</p>`;
+                  chatContentContainer.appendChild(userMessage);
+                  setTimeout(() => {
+                    userMessage.scrollIntoView({ behavior: "smooth" });
+                    showCalendar(chatContentContainer);
+                  }, 100);
+                });
+              });
+            }
+          });
+        }
+        const bookAppointmentBtn = document.getElementById("bookAppointmentBtn");
+        if (bookAppointmentBtn) {
+          bookAppointmentBtn.addEventListener("click", function () {
+            const chatContentContainer = document.querySelector(
+              ".chat-container .max-w-3xl",
+            );
+            if (chatContentContainer) {
+              const systemMessage = document.createElement("div");
+              systemMessage.className =
+                "chat-message bg-white p-4 rounded-lg shadow-sm self-start";
+              systemMessage.innerHTML = `
+      <p class="text-gray-700 mb-3">Lütfen görüşmek istediğiniz uzman tipini seçin:</p>
+      <div class="flex flex-wrap gap-2 mb-4">
+      <button class="expert-type-btn bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap" data-type="psikolog">
+      Psikolog
+      </button>
+      <button class="expert-type-btn bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap" data-type="diyetisyen">
+      Diyetisyen
+      </button>
+      <button class="expert-type-btn bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap" data-type="doktor">
+      Doktor
+      </button>
+      </div>
+      `;
+              chatContentContainer.appendChild(systemMessage);
+              setTimeout(() => {
+                systemMessage.scrollIntoView({ behavior: "smooth" });
+              }, 100);
+              const expertTypeButtons =
+                systemMessage.querySelectorAll(".expert-type-btn");
+              expertTypeButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                  expertTypeButtons.forEach((btn) => {
+                    btn.classList.remove("bg-primary", "text-white");
+                    btn.classList.add(
+                      "bg-white",
+                      "border",
+                      "border-gray-200",
+                      "text-gray-700",
+                    );
+                  });
+                  this.classList.remove(
+                    "bg-white",
+                    "border",
+                    "border-gray-200",
+                    "text-gray-700",
+                  );
+                  this.classList.add("bg-primary", "text-white");
+                  const userMessage = document.createElement("div");
+                  userMessage.className =
+                    "chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end";
+                  userMessage.innerHTML = `<p class="text-blue-800">${this.textContent.trim()}</p>`;
+                  chatContentContainer.appendChild(userMessage);
+                  setTimeout(() => {
+                    userMessage.scrollIntoView({ behavior: "smooth" });
+                  }, 100);
+                  const expertType = this.getAttribute("data-type");
+                  showSpecialtySelection(expertType, chatContentContainer);
+                });
+              });
+            }
+          });
+        }
+        function showSpecialtySelection(expertType, container) {
+          const specialties = {
+            psikolog: [
+              "Kaygı & Stres",
+              "Depresyon",
+              "İlişkiler",
+              "Özgüven",
+              "Travma",
+              "Diğer",
+            ],
+            diyetisyen: [
+              "Kilo Verme",
+              "Kilo Alma",
+              "Sporcu Beslenmesi",
+              "Hamilelik Diyeti",
+              "Çocuk Beslenmesi",
+              "Diğer",
+            ],
+            doktor: [
+              "Aile Hekimi",
+              "İç Hastalıkları",
+              "Kardiyoloji",
+              "Dermatoloji",
+              "Nöroloji",
+              "Diğer",
+            ],
+          };
+          const systemMessage = document.createElement("div");
+          systemMessage.className =
+            "chat-message bg-white p-4 rounded-lg shadow-sm self-start";
+          systemMessage.innerHTML = `
+      <p class="text-gray-700 mb-3">Lütfen spesifik alanı seçin:</p>
+      <div class="grid grid-cols-2 gap-2 mb-4 sm:grid-cols-3">
+      ${specialties[expertType]
+        .map(
+          (specialty) => `
+      <button class="specialty-btn bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-sm">
+      ${specialty}
+      </button>
+      `,
+        )
+        .join("")}
+      </div>
+      `;
+          container.appendChild(systemMessage);
+          setTimeout(() => {
+            systemMessage.scrollIntoView({ behavior: "smooth" });
+          }, 100);
+          const specialtyButtons = systemMessage.querySelectorAll(".specialty-btn");
+          specialtyButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+              specialtyButtons.forEach((btn) => {
+                btn.classList.remove("bg-primary", "text-white");
+                btn.classList.add(
+                  "bg-white",
+                  "border",
+                  "border-gray-200",
+                  "text-gray-700",
+                );
+              });
+              this.classList.remove(
+                "bg-white",
+                "border",
+                "border-gray-200",
+                "text-gray-700",
+              );
+              this.classList.add("bg-primary", "text-white");
+              const userMessage = document.createElement("div");
+              userMessage.className =
+                "chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end";
+              userMessage.innerHTML = `<p class="text-blue-800">${this.textContent.trim()}</p>`;
+              container.appendChild(userMessage);
+              setTimeout(() => {
+                userMessage.scrollIntoView({ behavior: "smooth" });
+              }, 100);
+              showAvailableExperts(expertType, this.textContent.trim(), container);
+            });
+          });
+        }
+        function showDoctorProfile(container, doctorName) {
+          const profileMessage = document.createElement("div");
+          profileMessage.className =
+            "chat-message bg-white p-4 rounded-lg shadow-sm self-start";
+          if (doctorName === "Dr. Ayşe Yılmaz") {
+            profileMessage.innerHTML = `
+      <div class="border border-gray-200 rounded-lg overflow-hidden">
+      <div class="p-4">
+      <div class="flex items-start gap-4 mb-6">
+      <div class="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+      <div class="w-16 h-16 flex items-center justify-center text-gray-400">
+      <i class="ri-user-line ri-3x"></i>
+      </div>
+      </div>
+      <div class="flex-1">
+      <div class="flex justify-between items-start mb-2">
+      <div>
+      <h3 class="font-medium text-gray-800 text-xl mb-1">Dr. Ayşe Yılmaz</h3>
+      <p class="text-gray-600">Klinik Psikolog</p>
+      </div>
+      <div class="flex items-center gap-1 text-yellow-400">
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <span class="text-gray-600 text-sm ml-1">(128 değerlendirme)</span>
+      </div>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+      <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">15+ Yıl Deneyim</span>
+      <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">4.9/5 Puan</span>
+      <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full">1000+ Danışan</span>
+      <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-full">Online Terapi</span>
+      </div>
+      </div>
+      </div>
+      <div class="space-y-6">
+      <div>
+      <h4 class="font-medium text-gray-800 mb-2">Eğitim</h4>
+      <ul class="space-y-2 text-sm text-gray-600">
+      <li class="flex items-start gap-2">
+      <div class="w-4 h-4 flex items-center justify-center mt-0.5">
+      <i class="ri-graduation-cap-line text-gray-400"></i>
+      </div>
+      <span>Doktora - İstanbul Üniversitesi, Klinik Psikoloji (2010)</span>
+      </li>
+      <li class="flex items-start gap-2">
+      <div class="w-4 h-4 flex items-center justify-center mt-0.5">
+      <i class="ri-graduation-cap-line text-gray-400"></i>
+      </div>
+      <span>Yüksek Lisans - Boğaziçi Üniversitesi, Psikoloji (2007)</span>
+      </li>
+      <li class="flex items-start gap-2">
+      <div class="w-4 h-4 flex items-center justify-center mt-0.5">
+      <i class="ri-graduation-cap-line text-gray-400"></i>
+      </div>
+      <span>Lisans - İstanbul Üniversitesi, Psikoloji (2005)</span>
+      </li>
+      </ul>
+      </div>
+      <div>
+      <h4 class="font-medium text-gray-800 mb-2">Sertifikalar & Eğitimler</h4>
+      <ul class="space-y-2 text-sm text-gray-600">
+      <li class="flex items-start gap-2">
+      <div class="w-4 h-4 flex items-center justify-center mt-0.5">
+      <i class="ri-check-line text-green-500"></i>
+      </div>
+      <span>Bilişsel Davranışçı Terapi Sertifikası</span>
+      </li>
+      <li class="flex items-start gap-2">
+      <div class="w-4 h-4 flex items-center justify-center mt-0.5">
+      <i class="ri-check-line text-green-500"></i>
+      </div>
+      <span>EMDR Terapi Sertifikası</span>
+      </li>
+      <li class="flex items-start gap-2">
+      <div class="w-4 h-4 flex items-center justify-center mt-0.5">
+      <i class="ri-check-line text-green-500"></i>
+      </div>
+      <span>Şema Terapi Eğitimi</span>
+      </li>
+      </ul>
+      </div>
+      <div>
+      <h4 class="font-medium text-gray-800 mb-2">Uzmanlık Alanları</h4>
+      <div class="flex flex-wrap gap-2">
+      <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">Kaygı Bozuklukları</span>
+      <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">Stres Yönetimi</span>
+      <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">Travma Sonrası Stres</span>
+      <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">Depresyon</span>
+      <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">İlişki Problemleri</span>
+      <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">Panik Atak</span>
+      <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">Sosyal Fobi</span>
+      </div>
+      </div>
+      <div>
+      <h4 class="font-medium text-gray-800 mb-2">Hasta Değerlendirmeleri</h4>
+      <div class="space-y-4">
+      <div class="border border-gray-100 rounded-lg p-3">
+      <div class="flex justify-between items-start mb-2">
+      <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+      <i class="ri-user-line"></i>
+      </div>
+      <div>
+      <p class="text-sm font-medium text-gray-800">Zeynep K.</p>
+      <div class="flex text-yellow-400 text-xs">
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      </div>
+      </div>
+      </div>
+      <span class="text-xs text-gray-500">2 hafta önce</span>
+      </div>
+      <p class="text-sm text-gray-600">Dr. Ayşe Hanım'ın profesyonel yaklaşımı ve empati yeteneği sayesinde kaygı problemlerimle başa çıkmayı öğrendim. Kendimi çok daha iyi hissediyorum.</p>
+      </div>
+      <div class="border border-gray-100 rounded-lg p-3">
+      <div class="flex justify-between items-start mb-2">
+      <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+      <i class="ri-user-line"></i>
+      </div>
+      <div>
+      <p class="text-sm font-medium text-gray-800">Ahmet Y.</p>
+      <div class="flex text-yellow-400 text-xs">
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      <i class="ri-star-fill"></i>
+      </div>
+      </div>
+      </div>
+      <span class="text-xs text-gray-500">1 ay önce</span>
+      </div>
+      <p class="text-sm text-gray-600">Uzun süredir yaşadığım stres sorunlarına çok etkili çözümler sundu. Terapi seansları boyunca kendimi güvende ve anlaşılmış hissettim.</p>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="border-t border-gray-200 p-4">
+      <div class="flex gap-3">
+      <button id="bookAppointmentFromProfile" class="flex-1 bg-primary text-white py-2 px-4 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap">
+      Randevu Al
+      </button>
+      <button class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+      <div class="w-5 h-5 flex items-center justify-center">
+      <i class="ri-share-line"></i>
+      </div>
+      </button>
+      </div>
+      </div>
+      </div>
+      `;
+          }
+          container.appendChild(profileMessage);
+          setTimeout(() => {
+            profileMessage.scrollIntoView({ behavior: "smooth" });
+            const bookAppointmentBtn = profileMessage.querySelector(
+              "#bookAppointmentFromProfile",
+            );
+            if (bookAppointmentBtn) {
+              bookAppointmentBtn.addEventListener("click", function () {
+                const userMessage = document.createElement("div");
+                userMessage.className =
+                  "chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end";
+                userMessage.innerHTML = `<p class="text-blue-800">Dr. Ayşe Yılmaz ile randevu almak istiyorum</p>`;
+                container.appendChild(userMessage);
+                setTimeout(() => {
+                  userMessage.scrollIntoView({ behavior: "smooth" });
+                  showCalendar(container);
+                }, 100);
+              });
+            }
+          }, 100);
+        }
+        function showAvailableExperts(expertType, specialty, container) {
+          const systemMessage = document.createElement("div");
+          systemMessage.className =
+            "chat-message bg-white p-4 rounded-lg shadow-sm self-start";
+          systemMessage.innerHTML = `
+      <p class="text-gray-700 mb-4">${specialty} için mevcut uzmanlarımız:</p>
+      <div class="grid gap-4 mb-4">
+      <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+      <div class="flex">
+      <div class="w-24 h-24 bg-gray-100 flex items-center justify-center">
+      <div class="w-12 h-12 flex items-center justify-center text-gray-400">
+      <i class="ri-user-line ri-2x"></i>
+      </div>
+      </div>
+      <div class="p-3 flex-1">
+      <div class="flex justify-between items-start">
+      <div>
+      <h3 class="font-medium text-gray-800">Dr. Ayşe Yılmaz</h3>
+      <p class="text-sm text-gray-500">Klinik Psikolog</p>
+      </div>
+      <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">Müsait</span>
+      </div>
+      <div class="mt-2 flex gap-2">
+      <button class="expert-select-btn bg-primary text-white text-sm py-1 px-3 rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap">
+      Randevu Al
+      </button>
+      <button class="view-profile-btn bg-white border border-gray-200 text-gray-700 text-sm py-1 px-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+      Profili Görüntüle
+      </button>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      `;
+          container.appendChild(systemMessage);
+          setTimeout(() => {
+            systemMessage.scrollIntoView({ behavior: "smooth" });
+          }, 100);
+          const expertSelectButtons =
+            systemMessage.querySelectorAll(".expert-select-btn");
+          const viewProfileButtons =
+            systemMessage.querySelectorAll(".view-profile-btn");
+          viewProfileButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+              const expertName =
+                this.closest(".flex").querySelector("h3").textContent;
+              showDoctorProfile(container, expertName);
+            });
+          });
+          expertSelectButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+              const expertName =
+                this.closest(".flex").querySelector("h3").textContent;
+              const userMessage = document.createElement("div");
+              userMessage.className =
+                "chat-message bg-blue-50 p-4 rounded-lg shadow-sm self-end";
+              userMessage.innerHTML = `<p class="text-blue-800">${expertName} ile randevu almak istiyorum</p>`;
+              container.appendChild(userMessage);
+              setTimeout(() => {
+                userMessage.scrollIntoView({ behavior: "smooth" });
+                showCalendar(container);
+              }, 100);
+            });
+          });
+        }
+        const advancedToolsHeader = document.getElementById("advancedToolsHeader");
+        const advancedToolsList = document.getElementById("advancedToolsList");
+        advancedToolsHeader.addEventListener("click", () => {
+          const arrowIcon = advancedToolsHeader.querySelector(
+            ".ri-arrow-down-s-line",
+          );
+          advancedToolsList.classList.toggle("hidden");
+          arrowIcon.style.transform = advancedToolsList.classList.contains("hidden")
+            ? "rotate(0deg)"
+            : "rotate(180deg)";
+        });
+        const appointmentManagementBtn = document.getElementById(
+          "appointmentManagementBtn",
+        );
+        const appointmentDialog = document.getElementById("appointmentDialog");
+        const closeAppointmentDialog = document.getElementById(
+          "closeAppointmentDialog",
+        );
+        const cancelDialog = document.getElementById("cancelDialog");
+        const cancelButtons = document.querySelectorAll(".cancelAppointmentBtn");
+        const confirmCancel = document.getElementById("confirmCancel");
+        const cancelCancelDialog = document.getElementById("cancelCancelDialog");
+        appointmentManagementBtn.addEventListener("click", () => {
+          appointmentDialog.classList.remove("hidden");
+          const chatContainer = document.querySelector(".chat-container .max-w-3xl");
+          if (chatContainer) {
+            chatContainer.appendChild(appointmentDialog);
+            setTimeout(() => {
+              appointmentDialog.scrollIntoView({ behavior: "smooth" });
+            }, 100);
+          }
+        });
+        closeAppointmentDialog.addEventListener("click", () => {
+          appointmentDialog.classList.add("hidden");
+        });
+        cancelButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            cancelDialog.classList.remove("hidden");
+            const chatContainer = document.querySelector(
+              ".chat-container .max-w-3xl",
+            );
+            if (chatContainer) {
+              chatContainer.appendChild(cancelDialog);
+              setTimeout(() => {
+                cancelDialog.scrollIntoView({ behavior: "smooth" });
+              }, 100);
+            }
+          });
+        });
+        confirmCancel.addEventListener("click", () => {
+          cancelDialog.classList.add("hidden");
+          appointmentDialog.classList.add("hidden");
+          const successMessage = document.createElement("div");
+          successMessage.className =
+            "fixed bottom-4 right-4 bg-green-100 border border-green-200 text-green-700 px-4 py-2 rounded-lg flex items-center gap-2";
+          successMessage.innerHTML = `
+      <div class="w-5 h-5 flex items-center justify-center">
+      <i class="ri-check-line"></i>
+      </div>
+      <span>Randevunuz başarıyla iptal edildi</span>
+      `;
+          document.body.appendChild(successMessage);
+          setTimeout(() => {
+            successMessage.remove();
+          }, 3000);
+        });
+        cancelCancelDialog.addEventListener("click", () => {
+          cancelDialog.classList.remove("flex");
+          cancelDialog.classList.add("hidden");
+        });
+        appointmentDialog.addEventListener("click", (e) => {
+          if (e.target === appointmentDialog) {
+            appointmentDialog.classList.remove("flex");
+            appointmentDialog.classList.add("hidden");
+          }
+        });
+        cancelDialog.addEventListener("click", (e) => {
+          if (e.target === cancelDialog) {
+            cancelDialog.classList.remove("flex");
+            cancelDialog.classList.add("hidden");
+          }
+        });
+        // Form validation
+        const inputFields = document.querySelectorAll("input, textarea");
+        inputFields.forEach((field) => {
+          field.addEventListener("input", function () {
+            if (this.value.trim() !== "") {
+              this.classList.add("border-green-300");
+            } else {
+              this.classList.remove("border-green-300");
+            }
+          });
+        });
+        // Confirm booking button
+        const confirmButton = Array.from(document.querySelectorAll("button")).find(
+          (button) => button.textContent.trim() === "Confirm Booking",
+        );
+        if (confirmButton) {
+          confirmButton.addEventListener("click", function () {
+            // Form validation would go here in a real application
+            // For demo purposes, we're assuming success
+            // Scroll to bottom to show confirmation
+            if (chatContainer) {
+              setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+              }, 100);
+            }
+          });
+        }
+      });
+    </script>
+    <script id="calendarInteraction">
+      document.addEventListener("DOMContentLoaded", function () {
+        // Calendar date selection
+        const calendarDates = document.querySelectorAll(
+          ".grid-cols-7 .text-gray-700",
+        );
+        calendarDates.forEach((date) => {
+          date.addEventListener("click", function () {
+            // Remove highlight from all dates
+            calendarDates.forEach((d) => {
+              d.classList.remove("bg-blue-100", "text-blue-700", "font-medium");
+            });
+            // Add highlight to selected date
+            this.classList.add("bg-blue-100", "text-blue-700", "font-medium");
+            // In a real app, this would update the available time slots
+          });
+        });
+        // Time slot selection
+        const timeSlots = document.querySelectorAll(".grid-cols-3 button");
+        timeSlots.forEach((slot) => {
+          slot.addEventListener("click", function () {
+            // Remove highlight from all time slots
+            timeSlots.forEach((s) => {
+              s.classList.remove("bg-primary", "text-white");
+              s.classList.add(
+                "bg-white",
+                "border",
+                "border-gray-200",
+                "text-gray-700",
+              );
+            });
+            // Add highlight to selected time slot
+            this.classList.remove(
+              "bg-white",
+              "border",
+              "border-gray-200",
+              "text-gray-700",
+            );
+            this.classList.add("bg-primary", "text-white");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
